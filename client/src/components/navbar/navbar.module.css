@@ -105,6 +105,26 @@
     font-size: 15px;
 }
 
+/* .isAdmin{
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background-color: #f00;
+    color: #fff;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 15px;
+} */
+
+sup {
+    vertical-align: super;
+    font-size: smaller;
+  }
+
 .logout{
     outline: none;
     border: none;

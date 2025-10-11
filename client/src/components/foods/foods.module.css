@@ -35,7 +35,15 @@
 .foods{
     display: flex;
     align-items: center;
+
+    justify-content: space-evenly;
     gap: 36px;
+    flex-wrap: wrap;
+    
+    /* overflow-y: scroll; */
+    flex-direction: row;
+    /* position: absolute; */
+
 }
 
 .food{

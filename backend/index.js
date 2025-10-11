@@ -8,6 +8,11 @@ const mongoose = require("mongoose")
 const authController = require('./controllers/authController')
 const productController = require('./controllers/productController')
 const uploadController = require('./controllers/uploadController')
+
+
+
+// const main = require('./controllers/spotifyCode')
+const spotifyController = require('./controllers/spotifyController')
 const app = express()
 
 // connect our db
@@ -28,13 +33,28 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/images', express.static('public/images'))
+
+// app.get('/info', (req, res) => {
+//     res.send({display_name, display_email, res_token});
+// });
+
+
+
 app.use('/auth', authController)
 app.use('/product', productController)
 app.use('/upload', uploadController)
 
+app.use('/spotify', spotifyController)
+
+
+
 // start our server
 // app.listen(process.env.PORT, () => console.log('Server has been started successfully'))
-app.listen(port, () => console.log('Server has been started successfully'))
+// app.listen(port, () => console.log('Server has been started successfully'))
+app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+      console.log(`Login URL: http://localhost:${port}/login`);
+    });
 
 // server is on port 5000, client is on port 3000,
 // we are going to get a cors ERROR!!, but cors() removes that's error
@@ -62,8 +82,10 @@ app.listen(port, () => console.log('Server has been started successfully'))
 // mongosh
 // show dbs -> oram db created
 // use oram
+// use foodOrderingApp
 // show collections -> userdatas created
 // db.users.find()
+// db.products.find()
 // .exit
 
 // ttchannel>
@@ -81,6 +103,8 @@ app.listen(port, () => console.log('Server has been started successfully'))
 // db.users.updateOne({ _id: ObjectId("68b32b1992dd4db42dd0e44f")},{$set:{ isAdmin: true}})
 
 // db.users.updateOne({username: 'mmudgal33'},{$set:{ isAdmin: true}})
+
+// db.products.updateOne({_id: ObjectId("68b34c8e256c19dae40fc05c")},{$set:{ img: 'momos2'}})
 
 
 // {

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 const Create = () => {
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
-  const [category, setCategory] = useState("")
+  const [category, setCategory] = useState("burger")
   const [image, setImage] = useState("")
   const [price, setPrice] = useState("")
   const [review, setReview] = useState("")
@@ -27,6 +27,10 @@ const Create = () => {
   const handleCloseImg = () => {
     setImage('')
   }
+
+  const handleChange = (e) => {setCategory(e.target.value)};
+
+
 
   const handleCreateProduct = async (e) => {
     e.preventDefault()
@@ -99,14 +103,36 @@ const Create = () => {
               onChange={(e) => setDesc(e.target.value)}
             />
           </div>
+
           <div className={classes.inputWrapper}>
+            <label htmlFor="category">Category:</label>
+            <select name="category" id="category" className={classes.input} value={category}
+              onChange={handleChange}>
+              <option value="burger">burger</option>
+              <option value="gyros">gyros</option>
+              <option value="pizza">pizza</option>
+              <option value="pasta">pasta</option>
+              <option value="momos">momos</option>
+              <option value="fries">fries</option>
+              <option value="petis">petis</option>
+              <option value="roll">roll</option>
+              <option value="tikichat">tikichat</option>
+              <option value="chowmin">chowmin</option>
+            </select>
+          </div>
+
+          {/* <p>Selected: {category}</p> */}
+
+
+          {/* <div className={classes.inputWrapper}>
             <label>Category: </label>
             <input type="text"
               placeholder='Category...'
               className={classes.input}
               onChange={(e) => setCategory(e.target.value)}
             />
-          </div>
+          </div> */}
+
           <div className={classes.inputWrapperImage}>
             <label htmlFor="image" className={classes.labelFileInput}>Image: <span>Upload here</span></label>
             <input type="file"
