@@ -5,6 +5,7 @@ import { AiOutlineUser, AiOutlineShoppingCart } from 'react-icons/ai'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../redux/authSlice'
+import { emptyCart } from '../../redux/cartSlice'
 
 import axios from 'axios';
 
@@ -26,10 +27,7 @@ const Navbar = () => {
     return () => (window.onscroll = null)
   }
 
-  const handleLogout = () => {
-    dispatch(logout())
-    navigate('/login')
-  }
+
 
 
   const { user } = useSelector((state) => { return state.auth });
@@ -37,6 +35,16 @@ const Navbar = () => {
 
   let username = user ? user.username : '';
   let isAdmin = user ? user.isAdmin : '';
+
+  const handleLogout = () => {
+    if (user) {
+      dispatch(logout())
+      dispatch( emptyCart() )
+      navigate('/login')
+    }
+    else{navigate('/login')}
+
+  }
 
   // useEffect(()=>{
   //   if(user!=null){
@@ -98,7 +106,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className={classes.right}>
-          
+
           <Link to='/cart' className={classes.cartContainer}>
             <AiOutlineShoppingCart className={classes.cartIcon} />
             <div className={classes.cartQuantity}>{products.length}</div>
@@ -108,7 +116,7 @@ const Navbar = () => {
 
           {
             user ? <button onClick={handleLogout} className={classes.logout}>Logout</button> :
-            <button onClick={handleLogout} className={classes.logout}>Login  </button>
+              <button onClick={handleLogout} className={classes.logout}>Login  </button>
           }
 
           {/* <div>
@@ -116,18 +124,18 @@ const Navbar = () => {
           <sup>{isAdmin ? <div style={{color:'red', fontSize: '8px'}}>admin</div> : ''}</sup>
           </div> */}
 
-          <p>{username} {isAdmin ? <sup style={{color:'red', fontSize: '8px'}}>admin</sup> : ''} </p>
-          
-          
-          
-          
-          
+          <p>{username} {isAdmin ? <sup style={{ color: 'red', fontSize: '8px' }}>admin</sup> : <sup style={{ color: 'red', fontSize: '8px' }}>client</sup>}</p>
+
+
+
+
+
 
           {/* <Link to='/' className={classes.cartContainer}>
           <AiOutlineUser className={classes.userIcon} />
             <div className={classes.isAdmin}></div>
           </Link> */}
-          
+
           {
             error && <div className={classes.errorMessage}>
               no token

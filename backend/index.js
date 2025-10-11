@@ -104,7 +104,7 @@ app.listen(port, () => {
 
 // db.users.updateOne({username: 'mmudgal33'},{$set:{ isAdmin: true}})
 
-// db.products.updateOne({_id: ObjectId("68b34c8e256c19dae40fc05c")},{$set:{ img: 'momos2'}})
+// db.products.updateOne({_id:  ObjectId("68eaa150976f436eefcf1631")},{$set:{ img: '1760207183948momos3.jpg'}})
 
 
 // {

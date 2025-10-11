@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineClose } from 'react-icons/ai'
 import { removeProduct, incProduct, decProduct } from '../../redux/cartSlice'
 import { useNavigate } from 'react-router-dom'
+import { emptyCart } from '../../redux/cartSlice'
 // import { config } from '../../Constants';
 // const URL = config.api;
 
@@ -42,6 +43,7 @@ const Cart = () => {
   const handleOrder = () => {
     if (products.length > 0) {
       navigate('/checkout')
+      // dispatch( emptyCart() )
     }
     
   }

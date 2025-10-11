@@ -46,6 +46,10 @@ const FoodDetails = () => {
     navigate('/cart')
   }
 
+  const movetoCategory = () => {
+    navigate(`/foods/${foodDetails?.category}`)
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.wrapper}>
@@ -64,7 +68,7 @@ const FoodDetails = () => {
           </div>
           <div className={classes.category}>
             <h3>Category: </h3>
-            <span className={classes.categoryName}>{foodDetails?.category}</span>
+            <span  onClick={movetoCategory} className={classes.categoryName}>{foodDetails?.category}</span>
           </div>
           <div className={classes.productDesc}>
             <div>Description: </div>

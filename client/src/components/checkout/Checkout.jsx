@@ -12,7 +12,7 @@ const Checkout = () => {
       <div className={classes.wrapper}>
         <h2>Your order is successful</h2>
         <p>Expect it in 1 hour</p>
-        <span>Total Price: ${totalPrice}</span>
+        <span>Total Price: ₹{totalPrice}</span>
       </div>
     </div>
   )
