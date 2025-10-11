@@ -58,6 +58,18 @@ import chowmin3 from '../assets/chowmin3.jpg'
 import chowmin4 from '../assets/chowmin4.jpg'
 import chowmin5 from '../assets/chowmin5.jpg'
 
+import pakode1 from '../assets/pakode1.jpg'
+import pakode2 from '../assets/pakode2.jpg'
+import pakode3 from '../assets/pakode3.jpg'
+import pakode4 from '../assets/pakode4.jpg'
+import pakode5 from '../assets/pakode5.jpg'
+
+import namkeen1 from '../assets/namkeen1.jpg'
+import namkeen2 from '../assets/namkeen2.jpg'
+import namkeen3 from '../assets/namkeen3.jpg'
+import namkeen4 from '../assets/namkeen4.jpg'
+import namkeen5 from '../assets/namkeen5.jpg'
+
 
 export const foodTypes = [
     {
@@ -108,6 +120,16 @@ export const foodTypes = [
     {
         name: 'chowmin',
         img: chowmin1,
+        id: crypto.randomUUID()
+    },
+    {
+        name: 'pakode',
+        img: pakode1,
+        id: crypto.randomUUID()
+    },
+    {
+        name: 'namkeen',
+        img: namkeen1,
         id: crypto.randomUUID()
     },
 ]
@@ -465,4 +487,75 @@ export const foods = [
         id: crypto.randomUUID(),
         price: Math.floor(Math.random() * 20 + 7)
     },
+    {
+        name: 'Namkeen 1',
+        category: 'Namkeen',
+        img: namkeen1,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Namkeen 2',
+        category: 'Namkeen',
+        img: namkeen2,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Namkeen 3',
+        category: 'Namkeen',
+        img: namkeen3,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Namkeen 4',
+        category: 'Namkeen',
+        img: namkeen4,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Namkeen 5',
+        category: 'Namkeen',
+        img: namkeen5,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Pakode 1',
+        category: 'Pakode',
+        img: pakode1,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Pakode 2',
+        category: 'Pakode',
+        img: pakode2,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Pakode 3',
+        category: 'Pakode',
+        img: pakode3,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Pakode 4',
+        category: 'Pakode',
+        img: pakode4,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+    {
+        name: 'Pakode 5',
+        category: 'Pakode',
+        img: pakode5,
+        id: crypto.randomUUID(),
+        price: Math.floor(Math.random() * 20 + 7)
+    },
+
 ]

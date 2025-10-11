@@ -118,6 +118,8 @@ const Create = () => {
               <option value="roll">roll</option>
               <option value="tikichat">tikichat</option>
               <option value="chowmin">chowmin</option>
+              <option value="namkeen">namkeen</option>
+              <option value="pakode">pakode</option>
             </select>
           </div>
 
