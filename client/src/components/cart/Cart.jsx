@@ -72,9 +72,9 @@ const Cart = () => {
                   <span className={classes.price}><span>₹</span>{product.price}</span>
                 </div>
                 <div className={classes.quantityIncDec}>
-                  <button disabled={product.quantity === 1} onClick={() => decreaseProduct(product._id)}>-</button>
-                  <span className={classes.price}><span>qty</span>{product.quantity}</span>
-                  <button onClick={() => increaseProduct(product._id)}>+</button>
+                  <button style={{color:'red', backgroundColor:'#f2f2f2', fontSize: '12px', fontWeight: 'bold', padding: '5px', border: '2px solid red', borderRadius: '50px'}} disabled={product.quantity === 1} onClick={() => decreaseProduct(product._id)}> -1 </button>
+                  <span className={classes.price}><span> qty </span> {product.quantity} </span>
+                  <button style={{color:'red', backgroundColor:'#f2f2f2', fontSize: '12px', fontWeight: 'bold', padding: '5px', border: '2px solid red', borderRadius: '50px'}} onClick={() => increaseProduct(product._id)}> +1 </button>
                 </div>
               </div>
             </div>
