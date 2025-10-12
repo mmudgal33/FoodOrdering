@@ -58,7 +58,8 @@ const FoodDetails = () => {
     <div className={classes.container}>
       <div className={classes.wrapper}>
         <div className={classes.left}>
-          <img src={`http://localhost:5000/images/${foodDetails?.img}`}/>
+          {/* <img src={`http://localhost:5000/images/${foodDetails?.img}`}/> */}
+          <img src={`${URL}/images/${foodDetails?.img}`} alt=""/>
         </div>
         <div className={classes.right}>
           <h2 className={classes.title}>{foodDetails?.title}</h2>

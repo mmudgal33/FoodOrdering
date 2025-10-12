@@ -59,7 +59,8 @@ const Create = () => {
       }
 
       // uploading product 
-      const res = await fetch(`http://localhost:5000/product`, {
+      // const res = await fetch(`http://localhost:5000/product`, {
+      const res = await fetch(`${URL}/product`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
