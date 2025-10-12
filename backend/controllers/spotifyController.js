@@ -1,5 +1,7 @@
 const spotifyController = require('express').Router()
 
+const URI = process.env.URI;
+
 // const url = 'http://localhost:5000'
 
 
@@ -36,7 +38,7 @@ var spotifyApi = new SpotifyWebApi({
 
     clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
     clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
-    redirectUri: 'http://127.0.0.1:5000/callback'
+    redirectUri: URI || 'http://127.0.0.1:5000/callback'
 
 });
 
