@@ -15,14 +15,24 @@ const Foods = () => {
         <h2 className={classes.title}>Best meals in the city</h2>
         <div className={classes.foods}>
 
-        {token !== null ? foodTypes.map((foodType) => (
+        {/* {token !== null ? 
+        foodTypes.map((foodType) => (
               <Link to={`${CLI}/foods/${foodType.name}`} key={foodType.id} className={classes.food}>
                 <h4>{foodType.name}</h4>
                 <div className={classes.imgContainer}>
                   <img src={foodType.img} alt="" />
                 </div>
               </Link>
-            )) : <h1 className={classes.noLogin}> Please login to give order! </h1>}
+            )) : <h1 className={classes.noLogin}> Please login to give order! </h1>} */}
+
+            {foodTypes.map((foodType) => (
+            <Link to={`${CLI}/foods/${foodType.name}`} key={foodType.id} className={classes.food}>
+              <h4>{foodType.name}</h4>
+              <div className={classes.imgContainer}>
+                <img src={foodType.img}/>
+              </div>
+            </Link>
+          ))}
 
 
           {/* {foodTypes.map((foodType) => (
