@@ -40,7 +40,8 @@ const Create = () => {
       let filename = null
 
       if (image) {
-        filename = Date.now() + image.name
+        // filename = Date.now() + image.name
+        filename = image.name
         formData.append("filename", filename)
         formData.append("image", image)
 
