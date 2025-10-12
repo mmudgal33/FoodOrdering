@@ -94,7 +94,7 @@ export const foodTypes = [
     },
     {
         name: 'momos',
-        img: momos2,
+        img: momos1,
         id: crypto.randomUUID()
     },
     {
