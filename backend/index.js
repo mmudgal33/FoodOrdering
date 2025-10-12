@@ -12,7 +12,7 @@ const uploadController = require('./controllers/uploadController')
 
 
 ///////////////////////////////////////////////////////////////////////////////////
-// const main = require('./controllers/spotifyCode')
+
 const spotifyController = require('./controllers/spotifyController')
 
 
@@ -29,16 +29,11 @@ app.set("view engine", "ejs");
 ///////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
 // connect our db
 mongoose.set('strictQuery', false)
 // mongo_url="mongodb://127.0.0.1:27017/foodOrderingApp";
 mongoose.connect(process.env.MONGO_URL, () => console.log('DB is successfully connected'))
 // mongoose.connect(mongo_url, () => console.log('DB is successfully connected'))
-
-
 
 
 
@@ -75,19 +70,6 @@ app.use('/upload', uploadController)
 
 app.use('/', spotifyController)
 
-
-
-
-// app.post('/order', verifyToken, (req, res) => {
-//     try {
-//       const order = req.body;
-//       console.log(order);
-//       return res.status(201).json({msg: "Successfully order received"});
-      
-//     } catch (error) {
-//       console.error(error.message)
-//     }
-//   })
 
 
 

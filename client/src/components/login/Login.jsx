@@ -37,13 +37,7 @@ const Login = () => {
       console.log('others', data.others, 'token', data.token);
       dispatch(login(data)) // {userInfo, token}
 
-
-
-    
-
       navigate("/")
-
-
 
     } catch (error) {
       setError(true)
@@ -53,10 +47,6 @@ const Login = () => {
     }
   }
 
-
-  // const signUpHandle = () => {
-  //   navigate("/signup")
-  // }
 
   return (
     <div className={classes.loginContainer}>

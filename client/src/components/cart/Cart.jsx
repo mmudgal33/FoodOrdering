@@ -62,7 +62,7 @@ const Cart = () => {
             user
           })
         })
-        
+
   
         const order = await res.json()
         console.log(order)
@@ -100,6 +100,7 @@ const Cart = () => {
               {/* <img src={`/images/${product.img}`} alt='' className={classes.img} /> */}
               <div className={classes.productData}>
                 <h4 className={classes.title}>{product.title}</h4>
+                <span style={{fontWeight:'lighter'}}>{product.review} ★</span>
                 <h6 className={classes.subtitle}>{product.desc}</h6>
 
 

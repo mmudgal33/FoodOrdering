@@ -44,6 +44,7 @@ const FoodCatalog = () => {
               </div>
               <div className={classes.foodDetails}>
                 <h4 className={classes.foodTitle}>{f?.title}</h4>
+                <span style={{fontWeight:'lighter'}}>{f?.review} ★</span>
                 <span className={classes.price}><span>₹</span> {f?.price}</span>
               </div>
             </Link>

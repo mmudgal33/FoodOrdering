@@ -20,19 +20,11 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  
-
-  // window.onscroll = () => {
-  //   setIsScrolled(window.pageYOffset === 0 ? false : true)
-  //   return () => (window.onscroll = null)
-  // }
 
   window.onscroll = () => {
     setIsScrolled(window.scrollY === 0 ? false : true)
     return () => (window.onscroll = null)
   }
-
-
 
 
   const { user } = useSelector((state) => { return state.auth });
@@ -51,32 +43,12 @@ const Navbar = () => {
 
   }
 
-  // useEffect(()=>{
-  //   if(user!=null){
-  //     setLoginState(previousState => {
-  //       return {
-  //           ...previousState,
-  //           username: username,
-  //           isAdmin: isAdmin
-  //       }
-  //   })
-  //   }
-  // },[user])
+  
 
 
 
   const handleSpotify = async () => {
 
-
-    // axios.get('http://localhost:5000/spotify/login')
-    //   .then(response => {
-    //     console.log(response.data);
-    //   })
-    //   .catch(error => {
-    //     console.error('Error fetching data:', error);
-    //   });
-
-    // e.preventDefault()
 
     try {
       // const res = await fetch(`http://localhost:5000/spotify/login`, {
@@ -92,13 +64,7 @@ const Navbar = () => {
       console.log('data',data);
       // dispatch(login(data)) // {userInfo, token}
 
-
-
-    
-
       navigate("/")
-
-
 
     } catch (error) {
       setError(true)
@@ -107,13 +73,9 @@ const Navbar = () => {
       }, 3000)
     }
 
-
   }
 
   
-  
-
-
 
 
   return (
@@ -158,22 +120,11 @@ const Navbar = () => {
               <button onClick={handleLogout} className={classes.logout}>Login  </button>
           }
 
-          {/* <div>
-          <div style={{color:'#000', fontSize: '20px'}}>{username}</div> 
-          <sup>{isAdmin ? <div style={{color:'red', fontSize: '8px'}}>admin</div> : ''}</sup>
-          </div> */}
+          
 
-          <p>{username} {isAdmin ? <sup style={{ color: 'red', fontSize: '8px' }}>admin</sup> : <sup style={{ color: 'red', fontSize: '8px' }}>client</sup>}</p>
+          <p>{username} {isAdmin ? <sup style={{ color: 'red', fontSize: '10px', fontWeight:'bold' }}>admin</sup> : <sup style={{ color: 'red', fontSize: '10px', fontWeight:'bold' }}>client</sup>}</p>
 
 
-
-
-
-
-          {/* <Link to='/' className={classes.cartContainer}>
-          <AiOutlineUser className={classes.userIcon} />
-            <div className={classes.isAdmin}></div>
-          </Link> */}
 
           {
             error && <div className={classes.errorMessage}>

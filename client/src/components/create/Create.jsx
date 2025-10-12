@@ -129,18 +129,6 @@ const Create = () => {
             </select>
           </div>
 
-          {/* <p>Selected: {category}</p> */}
-
-
-          {/* <div className={classes.inputWrapper}>
-            <label>Category: </label>
-            <input type="text"
-              placeholder='Category...'
-              className={classes.input}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-          </div> */}
-
           <div className={classes.inputWrapperImage}>
             <label htmlFor="image" className={classes.labelFileInput}>Image: <span>Upload here</span></label>
             <input type="file"

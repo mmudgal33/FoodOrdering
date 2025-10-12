@@ -63,6 +63,7 @@ const FoodDetails = () => {
         </div>
         <div className={classes.right}>
           <h2 className={classes.title}>{foodDetails?.title}</h2>
+          <span style={{fontWeight:'lighter'}}>{foodDetails?.review} ★</span>
           <div className={classes.price}>
             Price: <span>₹</span> {foodDetails?.price}
           </div>
