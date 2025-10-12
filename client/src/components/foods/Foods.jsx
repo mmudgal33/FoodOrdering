@@ -3,9 +3,11 @@ import { foodTypes } from '../../data/data'
 import {Link} from 'react-router-dom'
 import classes from './foods.module.css'
 import { config } from '../../Constants';
+import { useSelector } from 'react-redux'
 const CLI = config.url;
 
 const Foods = () => {
+  const { token } = useSelector((state) => state.auth)
   return (
     <section id="foods" className={classes.container}>
       <div className={classes.wrapper}>

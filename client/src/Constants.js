@@ -10,7 +10,7 @@
 
 const production = {
     url: 'https://mern-task-app-foodorderingfrontend1.onrender.com',
-    api: 'https://foodorderingfrontend1-api.onrender.com'
+    api: 'https://foodordering-r5ix.onrender.com'
     //api: 'https://mern-task-app-foodorderingfrontend1-api.onrender.com'
   };
   const development = {
