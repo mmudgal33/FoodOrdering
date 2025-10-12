@@ -3,16 +3,18 @@ import React from 'react'
 import classes from './cart.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineClose } from 'react-icons/ai'
-import { removeProduct, incProduct, decProduct } from '../../redux/cartSlice'
+import { removeProduct, incProduct, decProduct, emptyCart } from '../../redux/cartSlice'
 import { useNavigate } from 'react-router-dom'
-import { emptyCart } from '../../redux/cartSlice'
+
 import { config } from '../../Constants';
 const URL = config.api;
 
 
 // cart showing order product, quantity, increase decrease quantity, place final order here
 const Cart = () => {
-  const { products } = useSelector((state) => state.cart)
+  const { products } = useSelector((state) => state.cart);
+  const { user, token } = useSelector((state) => state.auth);
+  console.log('Cart ',products, user);
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -40,8 +42,40 @@ const Cart = () => {
   }
 
   // handle to order cart products, it navigates to checkout
-  const handleOrder = () => {
+  const handleOrder = async() => {
     if (products.length > 0) {
+
+
+
+      try {
+        
+        // sending order
+        // const res = await fetch(`http://localhost:5000/product`, {
+        const res = await fetch(`${URL}/auth/order`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            products,
+            user
+          })
+        })
+  
+        const order = await res.json()
+        console.log(order)
+  
+        navigate('/foods')
+  
+      } catch (error) {
+        console.error(error)
+      }
+
+
+
+
+
       navigate('/checkout')
       // dispatch( emptyCart() )
     }

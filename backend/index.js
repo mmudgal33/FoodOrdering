@@ -10,6 +10,7 @@ const productController = require('./controllers/productController')
 const uploadController = require('./controllers/uploadController')
 
 
+
 ///////////////////////////////////////////////////////////////////////////////////
 // const main = require('./controllers/spotifyCode')
 const spotifyController = require('./controllers/spotifyController')
@@ -25,7 +26,7 @@ app.use("/js", express.static(__dirname + '/public/js'));
 app.set("views", "./views");
 app.set("view engine", "ejs"); 
   
-
+///////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -73,6 +74,20 @@ app.use('/product', productController)
 app.use('/upload', uploadController)
 
 app.use('/', spotifyController)
+
+
+
+
+// app.post('/order', verifyToken, (req, res) => {
+//     try {
+//       const order = req.body;
+//       console.log(order);
+//       return res.status(201).json({msg: "Successfully order received"});
+      
+//     } catch (error) {
+//       console.error(error.message)
+//     }
+//   })
 
 
 
