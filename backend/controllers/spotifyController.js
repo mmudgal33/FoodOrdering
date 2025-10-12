@@ -1,224 +1,339 @@
 const spotifyController = require('express').Router()
 
+// const url = 'http://localhost:5000'
+
+
 const SpotifyWebApi = require('spotify-web-api-node');
-// Initialize Spotify API
-const spotifyApi = new SpotifyWebApi({
-    //   clientId: process.env.SPOTIFY_CLIENT_ID,
-    //   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    //   redirectUri: process.env.SPOTIFY_REDIRECT_URI
+require('dotenv').config();
+
+
+const scopes = [
+    'ugc-image-upload',
+    'user-read-playback-state',
+    'user-modify-playback-state',
+    'user-read-currently-playing',
+    'streaming',
+    'app-remote-control',
+    'user-read-email',
+    'user-read-private',
+    'playlist-read-collaborative',
+    'playlist-modify-public',
+    'playlist-read-private',
+    'playlist-modify-private',
+    'user-library-modify',
+    'user-library-read',
+    'user-top-read',
+    'user-read-playback-position',
+    'user-read-recently-played',
+    'user-follow-read',
+    'user-follow-modify'
+];
+
+var spotifyApi = new SpotifyWebApi({
+    // clientId: process.env.SPOTIFY_CLIENT_ID,
+    // clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    // redirectUri: "http://localhost:5000/callback",
+
     clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
     clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
-    redirectUri: 'http://127.0.0.1:5000/spotify/callback'
+    redirectUri: 'http://127.0.0.1:5000/callback'
+
 });
 
-class SpotifyService {
-    constructor() {
-        this.spotifyApi = spotifyApi;
-    }
 
-    // Generate authentication URL
-    getAuthURL() {
-        const scopes = [
-            'user-read-private',
-            'user-read-email',
-            'user-library-read',
-            'user-read-playback-state',
-            'user-modify-playback-state',
-            'playlist-read-private'
-        ];
 
-        return this.spotifyApi.createAuthorizeURL(scopes, 'your-state-string');
-    }
+let idUser = "";
+let access_token = "";
+let MusicPlaying;
 
-    // Handle callback and get tokens
-    async handleCallback(code) {
-        try {
-            console.log('Received authorization code:', code);
-
-            const data = await this.spotifyApi.authorizationCodeGrant(code);
-            const { access_token, refresh_token, expires_in } = data.body;
-
-            this.spotifyApi.setAccessToken(access_token);
-            this.spotifyApi.setRefreshToken(refresh_token);
-
-            console.log('Access token obtained successfully');
-
-            return {
-                accessToken: access_token,
-                refreshToken: refresh_token,
-                expiresIn: expires_in,
-                timestamp: Date.now()
-            };
-        } catch (error) {
-            console.error('Error getting access token:', error);
-            throw new Error(`Error getting access token: ${error.message}`);
-        }
-    }
-
-    // Refresh access token
-    async refreshAccessToken(refreshToken) {
-        try {
-            this.spotifyApi.setRefreshToken(refreshToken);
-            const data = await this.spotifyApi.refreshAccessToken();
-            const newAccessToken = data.body['access_token'];
-            this.spotifyApi.setAccessToken(newAccessToken);
-            return newAccessToken;
-        } catch (error) {
-            throw new Error(`Error refreshing token: ${error.message}`);
-        }
-    }
-
-    // Get user profile
-    async getUserProfile() {
-        try {
-            const user = await this.spotifyApi.getMe();
-            return user.body;
-        } catch (error) {
-            throw new Error(`Error getting user profile: ${error.message}`);
-        }
+class Playlist {
+    constructor(name, cover, uri, owner) {
+        this.name = name;
+        this.cover = cover;
+        this.uri = uri;
+        this.owner = owner;
     }
 }
 
-const spotifyService = new SpotifyService();
+class Device {
+    constructor(name, type, id) {
+        this.name = name;
+        this.type = type;
+        this.id = id;
+    }
+}
 
 
-// Routes
-spotifyController.get('/', (req, res) => {
-    res.send(`
-        <html>
-          <body>
-            <h1>Spotify API Example</h1>
-            <a href="/spotify/login">Login with Spotify</a>
-          </body>
-        </html>
-      `);
+
+spotifyController.get('', (req, res) => {
+    res.render("login");
 });
 
-// Step 1: Redirect to Spotify authorization
+
+
+
+
+
+
 spotifyController.get('/login', (req, res) => {
-    const authURL = spotifyService.getAuthURL();
-    console.log('Redirecting to:', authURL);
-    res.redirect(authURL);
+    res.redirect(spotifyApi.createAuthorizeURL(scopes));
 });
 
-// Step 2: Handle Spotify callback (this is where you get the code)
-spotifyController.get('/callback', async (req, res) => {
-    try {
-        const { code, error, state } = req.query;
+spotifyController.get('/callback', (req, res) => {
+    const error = req.query.error;
+    const code = req.query.code;
+    const state = req.query.state;
 
-        if (error) {
-            console.error('Spotify auth error:', error);
-            return res.status(400).json({ error: `Authentication failed: ${error}` });
-        }
-
-        if (!code) {
-            return res.status(400).json({ error: 'No authorization code received' });
-        }
-
-        console.log('Received code from Spotify:', code);
-
-        // Exchange code for access token
-        const tokens = await spotifyService.handleCallback(code);
-
-        // Get user profile to verify authentication
-        const userProfile = await spotifyService.getUserProfile();
-
-        // Send success response with tokens (in production, store securely)
-        res.send(`
-          <html>
-            <body>
-              <h1>Authentication Successful!</h1>
-              <p>Welcome, ${userProfile.display_name || userProfile.id}!</p>
-              <p>Email: ${userProfile.email || 'Not provided'}</p>
-              <div>
-                <h3>Access Token (for testing):</h3>
-                <textarea readonly style="width: 100%; height: 100px;">${tokens.accessToken}</textarea>
-              </div>
-              <a href="/spotify/api/user-profile">Get User Profile via API</a>
-              
-            </body>
-          </html>
-        `);
-
-    } catch (error) {
-        console.error('Callback error:', error);
-        res.status(500).json({ error: error.message });
+    if (error) {
+        console.error('Callback Error:', error);
+        res.send(`Callback Error: ${error}`);
+        return;
     }
+
+    spotifyApi
+        .authorizationCodeGrant(code)
+        .then(data => {
+            console.log(data);
+            access_token = data.body['access_token'];
+            const refresh_token = data.body['refresh_token'];
+            const expires_in = data.body['expires_in'];
+
+            spotifyApi.setAccessToken(access_token);
+            //console.log("access token: " + access_token);
+            spotifyApi.setRefreshToken(refresh_token);
+
+            setInterval(async () => {
+                const data = await spotifyApi.refreshAccessToken();
+                access_token = data.body['access_token'];
+                spotifyApi.setAccessToken(access_token);
+            }, expires_in / 2 * 1000);
+
+            res.redirect('/main');
+        })
+        .catch(error => {
+            console.error('Error getting Tokens:', error);
+            res.send(`Error getting Tokens: ${error}`);
+        });
 });
 
-// API Routes (protected)
-spotifyController.get('/api/user-profile', async (req, res) => {
-    try {
-        // const newToken = await refreshAccessToken(refreshToken);
-        const userProfile = await spotifyService.getUserProfile();
-        // res.json(userProfile);
-        res.send(`
-          <html>
-            <body>
-            <p>Welcome, ${userProfile.display_name || userProfile.id}!</p>
-              <a href="/spotify/api/search?q=6pLHooDrmmXR5eJTDdKyKD&type=track&limit=10">Get search via API</a>
-              
-            </body>
-          </html>
-        `);
-        
-    } catch (error) {
-        res.status(401).json({ error: 'Not authenticated' });
+
+spotifyController.get('/main', (req, res) => {
+
+    Promise.all([
+        spotifyApi.getMyTopArtists({ limit: 20, time_range: 'long_term' }),
+        spotifyApi.getMyTopTracks({ limit: 20, time_range: 'long_term' }),
+        spotifyApi.getMyRecentlyPlayedTracks({ limit: 20 }),
+        spotifyApi.getMyCurrentPlaybackState(),
+        spotifyApi.getMyCurrentPlayingTrack(),
+        spotifyApi.getMe()
+    ])
+        .then(function ([artistData, trackData, recentlyPlayedData, playbackStateData, playingData, meData]) {
+            let artists = artistData.body.items.map(artist => artist.name).join('# ');
+            let music = trackData.body.items.map(track => `${track.name} - ${track.artists[0].name}`).join('# ');
+            let RecentMusic = recentlyPlayedData.body.items.map(item => `${item.track.name} - ${item.track.artists[0].name}`).join('# ');
+            let playingMusic = "";
+            let playingArtist = "";
+            let playingphoto = "";
+            //   console.log('artistData: ',artistData);
+            //   console.log('############################################################################');
+            //   console.log('trackData: ',trackData);
+            //   console.log('recentlyPlayedData: ',recentlyPlayedData);
+            //   console.log('playbackStateData: ',playbackStateData);
+            //   console.log('playingData: ',playingData);
+            //   console.log('meData: ', meData);
+
+            //   console.log('playingData.body.item.album: ', playingData.body.item.album);
+
+            if (playbackStateData.body && playbackStateData.body.is_playing) {
+                playingMusic = playingData.body.item.name;
+                playingArtist = playingData.body.item.artists[0].name;
+                playingphoto = playingData.body.item.album.images[0].url;
+                MusicPlaying = true;
+            }
+            else {
+                playingMusic = "Clique";
+                playingArtist = "Play to continue what was playing";
+                playingphoto = "images/nada.jpeg";
+                MusicPlaying = false;
+            }
+            idUser = meData.body.id;
+            console.log("music name: " + playingMusic);
+            console.log("artist name: " + playingArtist);
+            console.log("photo url: " + playingphoto)
+            res.render("main", { artists: artists, music: music, RecentMusic: RecentMusic, playingMusic: playingMusic, playingArtist: playingArtist, playingphoto: playingphoto });
+        }, function (err) {
+            res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+        });
+});
+
+
+
+
+spotifyController.get('/config', (req, res) => {
+    Promise.all([
+        spotifyApi.getUserPlaylists(idUser),
+        spotifyApi.getMyDevices()
+    ])
+        .then(function ([playlistsData, devicesData]) {
+            let ArrayPlaylist = [];
+            let ArrayDevices = [];
+
+            //   console.log('playlistsData.body.items[0]: ',playlistsData.body.items[0]);
+            console.log('playlistsData.body.items[0].name: ', playlistsData.body.items[0].name);
+            console.log('playlistsData.body.items[0].images: ', playlistsData.body.items[0].images[0].url);
+            console.log('playlistsData.body.items[0].uri: ', playlistsData.body.items[0].uri);
+            console.log('playlistsData.body.items[0].owner.display_name: ', playlistsData.body.items[0].owner.display_name);
+
+            if (playlistsData.body.items.length < 1) {
+                p = new Playlist("Sem playlists", "images/nada.jpeg", "Add playlists to your library to exchange them here.");
+                ArrayPlaylist.push(p);
+            }
+            else {
+                for (i = 0; i < playlistsData.body.items.length; i++) {
+                    //   p = new Playlist(playlistsData.body.items[i].name, playlistsData.body.items[i].images[0].url, playlistsData.body.items[i].uri, playlistsData.body.items[i].owner.display_name);
+                    p = new Playlist(playlistsData.body.items[i].name, playlistsData.body.items[0].images[0].url, playlistsData.body.items[i].uri, playlistsData.body.items[i].owner.display_name);
+                    ArrayPlaylist.push(p);
+                }
+            }
+            if (devicesData.body.devices.length < 1) {
+                d = new Device("No active devices", "Launch Spotify on any device and reload it to make it appear here.");
+                ArrayDevices.push(d);
+            }
+            else {
+                for (i = 0; i < devicesData.body.devices.length; i++) {
+                    d = new Device(devicesData.body.devices[i].name, devicesData.body.devices[i].type, devicesData.body.devices[i].id);
+                    ArrayDevices.push(d);
+                }
+            }
+            res.render('config', { ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices });
+            console.log({ ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices })
+        }, function (err) {
+            res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+        });
+});
+
+
+
+
+
+
+spotifyController.get('/player', async (req, res) => {
+
+
+    var playlist = req.query.playlist;
+    var device = req.query.device;
+    console.log('playlist ', playlist);
+    // console.log(playlist.cover);
+    console.log('device ', device);
+
+    spotifyApi.play({
+        "context_uri": playlist,
+        "device_id": device,
+    })
+        .then(function () {
+            res.redirect(307, 'http://localhost:5000/main');
+            // res.redirect(307, '/main');
+
+        }, function (err) {
+            res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+
+            console.error('Play error:', err.body || err);
+
+        });
+
+
+
+
+
+
+
+
+});
+
+spotifyController.get('/next', (req, res) => {
+    if (MusicPlaying) {
+        spotifyApi.skipToNext()
+            .then(function () {
+                res.redirect(307, 'http://localhost:5000/main');
+            }, function (err) {
+                res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+            });
     }
+    else res.redirect(307, 'http://localhost:5000/main');
 });
 
-// Search endpoint
-spotifyController.get('/api/search', async (req, res) => {
-    try {
-        const { q, type = 'track', limit = 10 } = req.query;
-
-        if (!q) {
-            return res.status(400).json({ error: 'Query parameter "q" is required' });
-        }
-
-        const results = await spotifyService.spotifyApi.search(q, [type], { limit });
-        res.json(results.body);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+spotifyController.get('/prev', (req, res) => {
+    if (MusicPlaying) {
+        spotifyApi.skipToPrevious()
+            .then(function () {
+                res.redirect(307, 'http://localhost:5000/main');
+            }, function (err) {
+                res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+            });
     }
+    else res.redirect(307, 'http://localhost:5000/main');
 });
 
-// app.listen(port, () => {
-//   console.log(`Server running at http://localhost:${port}`);
-//   console.log(`Login URL: http://localhost:${port}/login`);
+spotifyController.get('/mute', function (req, res) {
+    spotifyApi.getMyCurrentPlaybackState()
+        .then(function (data) {
+            let currPorcVol = data.body.device.volume_percent;
+            let newPorcVol;
+
+            if (currPorcVol > 0) newPorcVol = 0;
+            else newPorcVol = 100;
+
+            spotifyApi.setVolume(newPorcVol)
+                .then(function () {
+                    res.redirect(307, 'http://localhost:5000/main');
+                }, function (err) {
+                    res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+                });
+        })
+});
+
+spotifyController.get('/play', function (req, res) {
+    spotifyApi.play({
+        "data": "",
+    })
+        .then(function () {
+            res.redirect(307, 'http://localhost:5000/main');
+        }, function (err) {
+            res.redirect(307, 'http://localhost:5000/config');
+        });
+});
+
+
+
+
+
+
+
+
+
+// app.get('/getArtistAlbums', (req, res) => {
+
+
+//     // Get Elvis' albums
+//     spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE').then(
+//         function (data) {
+//             console.log('Artist albums', data.body);
+//         },
+//         function (err) {
+//             console.error(err);
+//         }
+//     );
 // });
 
 
-spotifyController.post('/info', async (req, res) => {
-    // try {
-    //   const display_name = userProfile.display_name || null;
-    //   const display_email = userProfile.email || null;
-    //   const res_token = tokens.accessToken || null;
 
-    //   if(res_token===null){
-    //     throw new Error("token doesn't exist!!!")
-    //   }
-
-    //   return res.status(201).json({display_name, display_email, res_token})
-    // } catch (error) {
-    //     return res.status(500).json(error.message)
-    // }
-
-    res.send("About this wiki");
-})
+spotifyController.get('/error', (req, res) => {
+    var error = req.query.error
+    res.render('error', { error: error })
+});
 
 
-
-// const display_name = userProfile.display_name || null;
-// const display_email = userProfile.email || null;
-// const res_token = tokens.accessToken || null;
-
-// console.log(tokens, userProfile)
-
-
-
-
-module.exports = spotifyController
+module.exports = spotifyController;
 
 
 
@@ -251,29 +366,305 @@ module.exports = spotifyController
 
 
 
-// const spotifyController = require('express').Router()
 
 
-// var client_id = 'e257dc917f8640b5a9afe2f6e6ac1ef9';
-// var client_secret = 'b7265469b062446b973c4ad5a4e24c53';
 
-// var authOptions = {
-//   url: 'https://accounts.spotify.com/api/token',
-//   headers: {
-//     'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
-//   },
-//   form: {
-//     grant_type: 'client_credentials'
-//   },
-//   json: true
-// };
 
-// spotifyController.post(authOptions, function(error, response, body) {
-//   if (!error && response.statusCode === 200) {
-//     var token = body.access_token;
-//     console.log(token)
-//   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // const port = 5000;
+// const scopes = [
+//     'ugc-image-upload',
+//     'user-read-playback-state',
+//     'user-modify-playback-state',
+//     'user-read-currently-playing',
+//     'streaming',
+//     'app-remote-control',
+//     'user-read-email',
+//     'user-read-private',
+//     'playlist-read-collaborative',
+//     'playlist-modify-public',
+//     'playlist-read-private',
+//     'playlist-modify-private',
+//     'user-library-modify',
+//     'user-library-read',
+//     'user-top-read',
+//     'user-read-playback-position',
+//     'user-read-recently-played',
+//     'user-follow-read',
+//     'user-follow-modify'
+// ];
+
+// var spotifyApi = new SpotifyWebApi({
+//     // clientId: process.env.SPOTIFY_CLIENT_ID,
+//     // clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+//     // redirectUri: "http://localhost:5000/callback",
+//     clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
+//     clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
+//     redirectUri: 'http://127.0.0.1:5000/callback'
 // });
+
+
+
+// let idUser = "";
+// let access_token = "";
+// let MusicPlaying;
+
+// class Playlist {
+//     constructor(name, cover, uri, owner) {
+//         this.name = name;
+//         this.cover = cover;
+//         this.uri = uri;
+//         this.owner = owner;
+//     }
+// }
+
+// class Device {
+//     constructor(name, type, id) {
+//         this.name = name;
+//         this.type = type;
+//         this.id = id;
+//     }
+// }
+
+
+// spotifyController.get('', (req, res) => {
+//     res.render("login");
+// });
+
+// spotifyController.get('/login', (req, res) => {
+//     res.redirect(spotifyApi.createAuthorizeURL(scopes));
+// });
+
+// spotifyController.get('/callback', (req, res) => {
+//     const error = req.query.error;
+//     const code = req.query.code;
+//     const state = req.query.state;
+
+//     if (error) {
+//         console.error('Callback Error:', error);
+//         res.send(`Callback Error: ${error}`);
+//         return;
+//     }
+
+//     spotifyApi
+//         .authorizationCodeGrant(code)
+//         .then(data => {
+//             console.log(data);
+//             access_token = data.body['access_token'];
+//             const refresh_token = data.body['refresh_token'];
+//             const expires_in = data.body['expires_in'];
+
+//             spotifyApi.setAccessToken(access_token);
+//             //console.log("access token: " + access_token);
+//             spotifyApi.setRefreshToken(refresh_token);
+
+//             setInterval(async () => {
+//                 const data = await spotifyApi.refreshAccessToken();
+//                 access_token = data.body['access_token'];
+//                 spotifyApi.setAccessToken(access_token);
+//             }, expires_in / 2 * 1000);
+
+//             res.redirect('/main');
+//         })
+//         .catch(error => {
+//             console.error('Error getting Tokens:', error);
+//             res.send(`Error getting Tokens: ${error}`);
+//         });
+// });
+
+// spotifyController.get('/main', (req, res) => {
+
+//     Promise.all([
+//         spotifyApi.getMyTopArtists({ limit: 20, time_range: 'long_term' }),
+//         spotifyApi.getMyTopTracks({ limit: 20, time_range: 'long_term' }),
+//         spotifyApi.getMyRecentlyPlayedTracks({ limit: 20 }),
+//         spotifyApi.getMyCurrentPlaybackState(),
+//         spotifyApi.getMyCurrentPlayingTrack(),
+//         spotifyApi.getMe()
+//     ])
+//         .then(function ([artistData, trackData, recentlyPlayedData, playbackStateData, playingData, meData]) {
+//             let artistas = artistData.body.items.map(artist => artist.name).join('# ');
+//             let musicas = trackData.body.items.map(track => `${track.name} - ${track.artists[0].name}`).join('# ');
+//             let musicasRecentes = recentlyPlayedData.body.items.map(item => `${item.track.name} - ${item.track.artists[0].name}`).join('# ');
+//             let playingMusica = "";
+//             let playingArtista = "";
+//             let playingFoto = "";
+//             if (playbackStateData.body && playbackStateData.body.is_playing) {
+//                 playingMusica = playingData.body.item.name;
+//                 playingArtista = playingData.body.item.artists[0].name;
+//                 playingFoto = playingData.body.item.album.images[0].url;
+//                 MusicPlaying = true;
+//             }
+//             else {
+//                 playingMusica = "Clique";
+//                 playingArtista = "Play para continuar o que estava tocando";
+//                 playingFoto = "images/nada.jpeg";
+//                 MusicPlaying = false;
+//             }
+//             idUser = meData.body.id;
+//             /* console.log("nome da musica: " + playingMusica);
+//             console.log("nome do artista: " + playingArtista);
+//             console.log("url da foto" + playingFoto) */
+//             res.render("main", { artistas: artistas, musicas: musicas, musicasRecentes: musicasRecentes, playingMusica: playingMusica, playingArtista: playingArtista, playingFoto: playingFoto });
+//         }, function (err) {
+//             res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//         });
+// });
+
+// spotifyController.get('/config', (req, res) => {
+//     Promise.all([
+//         spotifyApi.getUserPlaylists(idUser),
+//         spotifyApi.getMyDevices()
+//     ])
+//         .then(function ([playlistsData, devicesData]) {
+//             let ArrayPlaylist = [];
+//             let ArrayDevices = [];
+
+//             console.log('playlistsData: ', playlistsData.items)
+
+//             if (playlistsData.body.items.length < 1) {
+//                 p = new Playlist("Sem playlists", "images/nada.jpeg", "Adicione playlists na sua bibloteca para tocá-las por aqui.");
+//                 ArrayPlaylist.push(p);
+//             }
+//             else {
+//                 for (i = 0; i < playlistsData.body.items.length; i++) {
+//                     // p = new Playlist(playlistsData.body.items[i].name, playlistsData.body.items[i].images[0].url, playlistsData.body.items[i].uri, playlistsData.body.items[i].owner.display_name);
+//                     // p = new Playlist(playlistsData.body.items[i].name, playlistsData.body.items[i].images.url, playlistsData.body.items[i].uri, playlistsData.body.items[i].owner.display_name);
+//                     p = new Playlist(playlistsData.body.items[i].name, playlistsData.body.items[0].images[0].url, playlistsData.body.items[i].uri, playlistsData.body.items[i].owner.display_name);
+//                     ArrayPlaylist.push(p);
+//                 }
+//             }
+//             if (devicesData.body.devices.length < 1) {
+//                 d = new Device("Sem dispositivos ativos", "Inicie seu Spotify em algum dispositivo e recarregue para que ele apareça aqui.");
+//                 ArrayDevices.push(d);
+//             }
+//             else {
+//                 for (i = 0; i < devicesData.body.devices.length; i++) {
+//                     d = new Device(devicesData.body.devices[i].name, devicesData.body.devices[i].type, devicesData.body.devices[i].id);
+//                     ArrayDevices.push(d);
+//                 }
+//             }
+//             res.render('config', { ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices });
+//             console.log({ ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices })
+//         }, function (err) {
+//             res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//         });
+// });
+
+// spotifyController.get('/pause', (req, res) => {
+//     if (MusicPlaying) {
+//         spotifyApi.pause({
+//             "data": "",
+//         })
+//             .then(function () {
+//                 res.redirect(307, 'http://localhost:5000/main');
+//             }, function (err) {
+//                 res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//             });
+//     }
+
+//     else res.redirect(307, 'http://localhost:5000/main');
+
+// });
+
+// spotifyController.get('/player', (req, res) => {
+
+//     var playlist = req.query.playlist;
+//     var device = req.query.device;
+//     //console.log(playlist);
+//     //console.log(device);
+
+//     spotifyApi.play({
+//         "context_uri": playlist,
+//         "device_id": device,
+//     })
+//         .then(function () {
+//             res.redirect(307, 'http://localhost:5000/main');
+//         }, function (err) {
+//             res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//         });
+// });
+
+// spotifyController.get('/next', (req, res) => {
+//     if (MusicPlaying) {
+//         spotifyApi.skipToNext()
+//             .then(function () {
+//                 res.redirect(307, 'http://localhost:5000/main');
+//             }, function (err) {
+//                 res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//             });
+//     }
+//     else res.redirect(307, 'http://localhost:5000/main');
+// });
+
+// spotifyController.get('/prev', (req, res) => {
+//     if (MusicPlaying) {
+//         spotifyApi.skipToPrevious()
+//             .then(function () {
+//                 res.redirect(307, 'http://localhost:5000/main');
+//             }, function (err) {
+//                 res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//             });
+//     }
+//     else res.redirect(307, 'http://localhost:5000/main');
+// });
+
+// spotifyController.get('/mute', function (req, res) {
+//     spotifyApi.getMyCurrentPlaybackState()
+//         .then(function (data) {
+//             let currPorcVol = data.body.device.volume_percent;
+//             let newPorcVol;
+
+//             if (currPorcVol > 0) newPorcVol = 0;
+//             else newPorcVol = 100;
+
+//             spotifyApi.setVolume(newPorcVol)
+//                 .then(function () {
+//                     res.redirect(307, 'http://localhost:5000/main');
+//                 }, function (err) {
+//                     res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//                 });
+//         })
+// });
+
+// spotifyController.get('/play', function (req, res) {
+//     spotifyApi.play({
+//         "data": "",
+//     })
+//         .then(function () {
+//             res.redirect(307, 'http://localhost:5000/main');
+//         }, function (err) {
+//             res.redirect(307, 'http://localhost:5000/config');
+//         });
+// });
+
+// spotifyController.get('/erro', (req, res) => {
+//     var erro = req.query.erro
+//     res.render('erro', { erro: erro })
+// });
+
+
+// module.exports = spotifyController;
+
+
+
+
+
+
+
 
 
 

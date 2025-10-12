@@ -63,16 +63,49 @@ const Navbar = () => {
   const handleSpotify = async () => {
 
 
-    axios.get('http://localhost:5000/spotify')
-      .then(response => {
-        console.log(response.data);
+    // axios.get('http://localhost:5000/spotify/login')
+    //   .then(response => {
+    //     console.log(response.data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching data:', error);
+    //   });
+
+    // e.preventDefault()
+
+    try {
+      const res = await fetch(`http://localhost:5000/spotify/login`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: "GET",
+        // body: JSON.stringify({ email, password })
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+
+      const data = await res.json()
+      console.log('data',data);
+      // dispatch(login(data)) // {userInfo, token}
+
+
+
+    
+
+      navigate("/")
+
+
+
+    } catch (error) {
+      setError(true)
+      setTimeout(() => {
+        setError(false)
+      }, 3000)
+    }
 
 
   }
+
+  
+  
 
 
 

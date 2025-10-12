@@ -10,10 +10,34 @@ const productController = require('./controllers/productController')
 const uploadController = require('./controllers/uploadController')
 
 
-
+///////////////////////////////////////////////////////////////////////////////////
 // const main = require('./controllers/spotifyCode')
 const spotifyController = require('./controllers/spotifyController')
+
+
+
 const app = express()
+  
+app.use(express.static('public'));
+app.use("/css", express.static(__dirname + '/public/css'));
+app.use("/js", express.static(__dirname + '/public/js'));
+  
+app.set("views", "./views");
+app.set("view engine", "ejs"); 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // connect our db
 
@@ -44,7 +68,7 @@ app.use('/auth', authController)
 app.use('/product', productController)
 app.use('/upload', uploadController)
 
-app.use('/spotify', spotifyController)
+app.use('/', spotifyController)
 
 
 
@@ -53,7 +77,7 @@ app.use('/spotify', spotifyController)
 // app.listen(port, () => console.log('Server has been started successfully'))
 app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);
-      console.log(`Login URL: http://localhost:${port}/login`);
+    //   console.log(`Login URL: http://localhost:${port}/login`);
     });
 
 // server is on port 5000, client is on port 3000,
