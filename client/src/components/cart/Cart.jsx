@@ -62,6 +62,7 @@ const Cart = () => {
             user
           })
         })
+        
   
         const order = await res.json()
         console.log(order)
