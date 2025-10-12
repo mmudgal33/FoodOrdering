@@ -2,7 +2,7 @@ const spotifyController = require('express').Router()
 
 const URI = process.env.URI;
 
-// const url = 'http://localhost:5000'
+// const url = 'https://foodordering-r5ix.onrender.com'
 
 
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -34,7 +34,7 @@ const scopes = [
 var spotifyApi = new SpotifyWebApi({
     // clientId: process.env.SPOTIFY_CLIENT_ID,
     // clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    // redirectUri: "http://localhost:5000/callback",
+    // redirectUri: "https://foodordering-r5ix.onrender.com/callback",
 
     clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
     clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
@@ -164,7 +164,7 @@ spotifyController.get('/main', (req, res) => {
             console.log("photo url: " + playingphoto)
             res.render("main", { artists: artists, music: music, RecentMusic: RecentMusic, playingMusic: playingMusic, playingArtist: playingArtist, playingphoto: playingphoto });
         }, function (err) {
-            res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+            res.redirect(`https://foodordering-r5ix.onrender.com/error?error=${err.statusCode}`);
         });
 });
 
@@ -210,7 +210,7 @@ spotifyController.get('/config', (req, res) => {
             res.render('config', { ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices });
             console.log({ ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices })
         }, function (err) {
-            res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+            res.redirect(`https://foodordering-r5ix.onrender.com/error?error=${err.statusCode}`);
         });
 });
 
@@ -233,11 +233,11 @@ spotifyController.get('/player', async (req, res) => {
         "device_id": device,
     })
         .then(function () {
-            res.redirect(307, 'http://localhost:5000/main');
+            res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
             // res.redirect(307, '/main');
 
         }, function (err) {
-            res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+            res.redirect(`https://foodordering-r5ix.onrender.com/error?error=${err.statusCode}`);
 
             console.error('Play error:', err.body || err);
 
@@ -256,24 +256,24 @@ spotifyController.get('/next', (req, res) => {
     if (MusicPlaying) {
         spotifyApi.skipToNext()
             .then(function () {
-                res.redirect(307, 'http://localhost:5000/main');
+                res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
             }, function (err) {
-                res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+                res.redirect(`https://foodordering-r5ix.onrender.com/error?error=${err.statusCode}`);
             });
     }
-    else res.redirect(307, 'http://localhost:5000/main');
+    else res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 });
 
 spotifyController.get('/prev', (req, res) => {
     if (MusicPlaying) {
         spotifyApi.skipToPrevious()
             .then(function () {
-                res.redirect(307, 'http://localhost:5000/main');
+                res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
             }, function (err) {
-                res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+                res.redirect(`https://foodordering-r5ix.onrender.com/error?error=${err.statusCode}`);
             });
     }
-    else res.redirect(307, 'http://localhost:5000/main');
+    else res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 });
 
 spotifyController.get('/mute', function (req, res) {
@@ -287,9 +287,9 @@ spotifyController.get('/mute', function (req, res) {
 
             spotifyApi.setVolume(newPorcVol)
                 .then(function () {
-                    res.redirect(307, 'http://localhost:5000/main');
+                    res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
                 }, function (err) {
-                    res.redirect(`http://localhost:5000/error?error=${err.statusCode}`);
+                    res.redirect(`https://foodordering-r5ix.onrender.com/error?error=${err.statusCode}`);
                 });
         })
 });
@@ -299,9 +299,9 @@ spotifyController.get('/play', function (req, res) {
         "data": "",
     })
         .then(function () {
-            res.redirect(307, 'http://localhost:5000/main');
+            res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
         }, function (err) {
-            res.redirect(307, 'http://localhost:5000/config');
+            res.redirect(307, 'https://foodordering-r5ix.onrender.com/config');
         });
 });
 
@@ -412,7 +412,7 @@ module.exports = spotifyController;
 // var spotifyApi = new SpotifyWebApi({
 //     // clientId: process.env.SPOTIFY_CLIENT_ID,
 //     // clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-//     // redirectUri: "http://localhost:5000/callback",
+//     // redirectUri: "https://foodordering-r5ix.onrender.com/callback",
 //     clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
 //     clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
 //     redirectUri: 'http://127.0.0.1:5000/callback'
@@ -522,7 +522,7 @@ module.exports = spotifyController;
 //             console.log("url da foto" + playingFoto) */
 //             res.render("main", { artistas: artistas, musicas: musicas, musicasRecentes: musicasRecentes, playingMusica: playingMusica, playingArtista: playingArtista, playingFoto: playingFoto });
 //         }, function (err) {
-//             res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//             res.redirect(`https://foodordering-r5ix.onrender.com/erro?erro=${err.statusCode}`);
 //         });
 // });
 
@@ -562,7 +562,7 @@ module.exports = spotifyController;
 //             res.render('config', { ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices });
 //             console.log({ ArrayPlaylist: ArrayPlaylist, ArrayDevices: ArrayDevices })
 //         }, function (err) {
-//             res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//             res.redirect(`https://foodordering-r5ix.onrender.com/erro?erro=${err.statusCode}`);
 //         });
 // });
 
@@ -572,13 +572,13 @@ module.exports = spotifyController;
 //             "data": "",
 //         })
 //             .then(function () {
-//                 res.redirect(307, 'http://localhost:5000/main');
+//                 res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 //             }, function (err) {
-//                 res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//                 res.redirect(`https://foodordering-r5ix.onrender.com/erro?erro=${err.statusCode}`);
 //             });
 //     }
 
-//     else res.redirect(307, 'http://localhost:5000/main');
+//     else res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 
 // });
 
@@ -594,9 +594,9 @@ module.exports = spotifyController;
 //         "device_id": device,
 //     })
 //         .then(function () {
-//             res.redirect(307, 'http://localhost:5000/main');
+//             res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 //         }, function (err) {
-//             res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//             res.redirect(`https://foodordering-r5ix.onrender.com/erro?erro=${err.statusCode}`);
 //         });
 // });
 
@@ -604,24 +604,24 @@ module.exports = spotifyController;
 //     if (MusicPlaying) {
 //         spotifyApi.skipToNext()
 //             .then(function () {
-//                 res.redirect(307, 'http://localhost:5000/main');
+//                 res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 //             }, function (err) {
-//                 res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//                 res.redirect(`https://foodordering-r5ix.onrender.com/erro?erro=${err.statusCode}`);
 //             });
 //     }
-//     else res.redirect(307, 'http://localhost:5000/main');
+//     else res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 // });
 
 // spotifyController.get('/prev', (req, res) => {
 //     if (MusicPlaying) {
 //         spotifyApi.skipToPrevious()
 //             .then(function () {
-//                 res.redirect(307, 'http://localhost:5000/main');
+//                 res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 //             }, function (err) {
-//                 res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//                 res.redirect(`https://foodordering-r5ix.onrender.com/erro?erro=${err.statusCode}`);
 //             });
 //     }
-//     else res.redirect(307, 'http://localhost:5000/main');
+//     else res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 // });
 
 // spotifyController.get('/mute', function (req, res) {
@@ -635,9 +635,9 @@ module.exports = spotifyController;
 
 //             spotifyApi.setVolume(newPorcVol)
 //                 .then(function () {
-//                     res.redirect(307, 'http://localhost:5000/main');
+//                     res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 //                 }, function (err) {
-//                     res.redirect(`http://localhost:5000/erro?erro=${err.statusCode}`);
+//                     res.redirect(`https://foodordering-r5ix.onrender.com/erro?erro=${err.statusCode}`);
 //                 });
 //         })
 // });
@@ -647,9 +647,9 @@ module.exports = spotifyController;
 //         "data": "",
 //     })
 //         .then(function () {
-//             res.redirect(307, 'http://localhost:5000/main');
+//             res.redirect(307, 'https://foodordering-r5ix.onrender.com/main');
 //         }, function (err) {
-//             res.redirect(307, 'http://localhost:5000/config');
+//             res.redirect(307, 'https://foodordering-r5ix.onrender.com/config');
 //         });
 // });
 

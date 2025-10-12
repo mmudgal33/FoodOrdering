@@ -21,7 +21,7 @@ function Teste2(target) {
 PlayButton.onclick = function() {
     console.log('DeviceId', DeviceId);
     if(PlaylistUri != "" && DeviceId != ""){
-        var url = `http://localhost:5000/player?playlist=${PlaylistUri}&device=${DeviceId}`;
+        var url = `https://foodordering-r5ix.onrender.com/player?playlist=${PlaylistUri}&device=${DeviceId}`;
         window.location.href = url;
     }
 }

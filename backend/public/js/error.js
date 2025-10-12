@@ -1,4 +1,4 @@
 document.querySelector('.green-button').addEventListener('click', function() {
-    var url = 'http://localhost:5000';
+    var url = 'https://foodordering-r5ix.onrender.com';
     window.location.href = url;
 });

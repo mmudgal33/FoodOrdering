@@ -59,7 +59,7 @@ muteButton.onclick = function() {
         return;
     }
     else{
-        var url = 'http://localhost:5000/mute';
+        var url = 'https://foodordering-r5ix.onrender.com/mute';
         window.location.href = url; 
     }
 }
@@ -67,27 +67,27 @@ muteButton.onclick = function() {
 pauseButton.onclick = function() {
     
     if(playingMusic.textContent != null && playingMusic.textContent != 'Clique'){
-        var url = 'http://localhost:5000/pause';
+        var url = 'https://foodordering-r5ix.onrender.com/pause';
         window.location.href = url; 
     }
     else{
-        var url = 'http://localhost:5000/play';
+        var url = 'https://foodordering-r5ix.onrender.com/play';
         window.location.href = url; 
     }
 
 }
 
 nextButton.onclick = function() {
-    var url = 'http://localhost:5000/next';
+    var url = 'https://foodordering-r5ix.onrender.com/next';
     window.location.href = url;
 }
 
 prevButton.onclick = function() {
-    var url = 'http://localhost:5000/prev';
+    var url = 'https://foodordering-r5ix.onrender.com/prev';
     window.location.href = url;
 }
 ConfigurarPlayerButton.onclick = function() {
-    var url = 'http://localhost:5000/config';
+    var url = 'https://foodordering-r5ix.onrender.com/config';
     window.location.href = url;
 }
 
