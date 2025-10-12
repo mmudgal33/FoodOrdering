@@ -5,6 +5,9 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
+import { config } from '../../Constants';
+const URL = config.api;
+
 
 const Create = () => {
   const [title, setTitle] = useState("")
@@ -45,7 +48,8 @@ const Create = () => {
         formData.append("filename", filename)
         formData.append("image", image)
 
-        await fetch(`http://localhost:5000/upload/image`, {
+        // await fetch(`http://localhost:5000/upload/image`, {
+        await fetch(`${URL}/upload/image`, {
           headers: {
             "Authorization": `Bearer ${token}`
           },

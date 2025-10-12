@@ -9,6 +9,9 @@ import { addProduct } from '../../redux/cartSlice'
 
 import {useNavigate} from 'react-router-dom'
 
+import { config } from '../../Constants';
+const URL = config.api;
+
 const FoodDetails = () => {
   const [foodDetails, setFoodsDetails] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -21,7 +24,8 @@ const FoodDetails = () => {
 
   useEffect(() => {
      const fetchFoodDetails = async() => {
-      const res = await fetch(`http://localhost:5000/product/find/${id}`, {
+      // const res = await fetch(`http://localhost:5000/product/find/${id}`, {
+      const res = await fetch(`${URL}/product/find/${id}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }

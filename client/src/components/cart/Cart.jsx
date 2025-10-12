@@ -6,8 +6,8 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { removeProduct, incProduct, decProduct } from '../../redux/cartSlice'
 import { useNavigate } from 'react-router-dom'
 import { emptyCart } from '../../redux/cartSlice'
-// import { config } from '../../Constants';
-// const URL = config.api;
+import { config } from '../../Constants';
+const URL = config.api;
 
 
 // cart showing order product, quantity, increase decrease quantity, place final order here
@@ -60,8 +60,8 @@ const Cart = () => {
 
 
 
-              <img src={`http://localhost:5000/images/${product.img}`} alt='' className={classes.img} />
-              {/* <img src={`${URL}/images/${product.img}`} alt='' className={classes.img} /> */}
+              {/* <img src={`http://localhost:5000/images/${product.img}`} alt='' className={classes.img} /> */}
+              <img src={`${URL}/images/${product.img}`} alt='' className={classes.img} />
               {/* <img src={`/images/${product.img}`} alt='' className={classes.img} /> */}
               <div className={classes.productData}>
                 <h4 className={classes.title}>{product.title}</h4>

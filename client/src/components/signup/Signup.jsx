@@ -6,6 +6,9 @@ import img from '../../assets/womaneating.jpg'
 import { register } from '../../redux/authSlice'
 import { useDispatch } from 'react-redux'
 
+import { config } from '../../Constants';
+const URL = config.api;
+
 const Signup = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
@@ -17,7 +20,8 @@ const Signup = () => {
   const handleSignup = async(e) => {
     e.preventDefault()
     try {
-      const res = await fetch(`http://localhost:5000/auth/register`, {
+      // const res = await fetch(`http://localhost:5000/auth/register`, {
+      const res = await fetch(`${URL}/auth/register`, {
         headers: {
           "Content-Type": 'application/json'
         },

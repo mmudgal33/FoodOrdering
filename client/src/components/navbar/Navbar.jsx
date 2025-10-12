@@ -9,13 +9,18 @@ import { emptyCart } from '../../redux/cartSlice'
 
 import axios from 'axios';
 
+import { config } from '../../Constants';
+const URL = config.api;
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { products } = useSelector((state) => state.cart)
   // const [loginState, setLoginState] = useState({ username: '', isAdmin: false })
   const [error, setError] = useState(false)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  
 
   // window.onscroll = () => {
   //   setIsScrolled(window.pageYOffset === 0 ? false : true)
@@ -74,7 +79,8 @@ const Navbar = () => {
     // e.preventDefault()
 
     try {
-      const res = await fetch(`http://localhost:5000/spotify/login`, {
+      // const res = await fetch(`http://localhost:5000/spotify/login`, {
+      const res = await fetch(`${URL}/spotify/login`, {
         headers: {
           'Content-Type': 'application/json'
         },

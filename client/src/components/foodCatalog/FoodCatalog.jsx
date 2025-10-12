@@ -5,6 +5,10 @@ import { useSelector } from 'react-redux'
 import classes from './foodCatalog.module.css'
 import { useEffect } from 'react'
 
+import { config } from '../../Constants';
+const URL = config.api;
+const CLI = config.url;
+
 const FoodCatalog = () => {
   const [filteredFoods, setFilteredFoods] = useState([])
   const location = useLocation()
@@ -13,7 +17,8 @@ const FoodCatalog = () => {
 
   useEffect(() => {
     const fetchFoodType = async () => {
-      const res = await fetch(`http://localhost:5000/product?category=${foodEndpoint}`, {
+      // const res = await fetch(`http://localhost:5000/product?category=${foodEndpoint}`, {
+      const res = await fetch(`${URL}/product?category=${foodEndpoint}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
