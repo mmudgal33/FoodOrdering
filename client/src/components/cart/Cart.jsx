@@ -74,9 +74,6 @@ const Cart = () => {
       }
 
 
-
-
-
       navigate('/checkout')
       // dispatch( emptyCart() )
     }

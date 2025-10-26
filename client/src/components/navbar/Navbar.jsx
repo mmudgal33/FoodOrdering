@@ -27,7 +27,7 @@ const Navbar = () => {
   }
 
 
-  const { user } = useSelector((state) => { return state.auth });
+  const { user, token } = useSelector((state) => { return state.auth });
   console.log('user', user);
 
   let username = user ? user.username : '';
@@ -45,18 +45,63 @@ const Navbar = () => {
 
   
 
+  
+    // const handleSpotify = async() => {
+     
+    //  const res = await fetch(`/`, {
+    // //  const res = await fetch(`${URL}/`, {
+    //    headers: {
+    //      "Authorization": `Bearer ${token}`
+    //    },
+    //    method: "GET",
+    //  })
+    
+    // }
+    
+
+
+
+  // const handleSpotify = async() => {
+    
+  //     try {
+        
+  //       // sending order
+  //       const res = await fetch(`http://localhost:5000/`, {
+  //       // const res = await fetch(`${URL}/`, {
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`
+  //         }, 
+  //       })
+
+  
+  //       // const order = await res.json()
+  //       // console.log(order)
+  
+  //       // navigate('/foods')
+  
+  //     } catch (error) {
+  //       console.error(error)
+  //     }
+
+    
+    
+  // }
+
 
 
   const handleSpotify = async () => {
 
 
     try {
-      // const res = await fetch(`http://localhost:5000/spotify/login`, {
-      const res = await fetch(`${URL}/spotify/login`, {
+      const res = await fetch(`http://localhost:5000/spotify/login`, {
+      // const res = await fetch(`${URL}/spotify/login`, {
+      // const res = await fetch('https://foodordering-r5ix.onrender.com', {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         method: "GET",
+        // mode: 'no-cors',
         // body: JSON.stringify({ email, password })
       })
 
@@ -104,6 +149,9 @@ const Navbar = () => {
             <li className={classes.listItem}>
               <Link to='/create'>Create</Link>
             </li>
+            {/* <li className={classes.listItem}>
+              <Link to="/SpotifyApp">SpotifyApp</Link>
+            </li> */}
           </ul>
         </div>
         <div className={classes.right}>
