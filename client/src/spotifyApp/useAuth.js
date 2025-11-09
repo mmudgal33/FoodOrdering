@@ -1,34 +1,42 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
-
 import { config } from './Constants';
-const API = config.api;
 
+const API = config.api;
 
 export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState()
   const [refreshToken, setRefreshToken] = useState()
   const [expiresIn, setExpiresIn] = useState()
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    console.log('useAuth ', code, API)
+    if (!code) {
+      console.log('No code provided to useAuth');
+      return;
+    }
+    
+    console.log('useAuth - Code:', code);
+    console.log('useAuth - API URL:', API);
+    
     axios
-      // .post("http://127.0.0.1:5000/login", 
-      // .post("https://spotifybackendtofrontendapp.onrender.com/login",
-      .post(`${API}/login`,
-      {code})
+      .post(`${API}/login`, { code })
       .then(res => {
+        console.log('Login response:', res.data);
         setAccessToken(res.data.accessToken)
         setRefreshToken(res.data.refreshToken)
         setExpiresIn(res.data.expiresIn)
-        window.history.pushState({}, null, "/")
+        // Clear the URL without reloading
+        window.history.replaceState({}, null, "/")
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Login error:', error);
+        setError(error);
         window.location = "/"
       })
   }, [code])
 
-
+  // ... rest of your useAuth code
   console.log(`accessToken ${accessToken}`);
   console.log(`refreshToken ${refreshToken}`);
   console.log(`expiresIn ${expiresIn}`);
@@ -59,7 +67,71 @@ export default function useAuth(code) {
   localStorage.setItem('refreshToken', refreshToken);
 
   return accessToken
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { useState, useEffect } from "react"
+// import axios from "axios"
+
+// import { config } from './Constants';
+// const API = config.api;
+
+
+// export default function useAuth(code) {
+//   const [accessToken, setAccessToken] = useState()
+//   const [refreshToken, setRefreshToken] = useState()
+//   const [expiresIn, setExpiresIn] = useState()
+
+//   useEffect(() => {
+//     console.log('useAuth ', code, API)
+//     axios
+//       // .post("http://127.0.0.1:5000/login", 
+//       // .post("https://spotifybackendtofrontendapp.onrender.com/login",
+//       .post(`${API}/login`,
+//       {code})
+//       .then(res => {
+//         setAccessToken(res.data.accessToken)
+//         setRefreshToken(res.data.refreshToken)
+//         setExpiresIn(res.data.expiresIn)
+//         window.history.pushState({}, null, "/")
+//       })
+//       .catch(() => {
+//         window.location = "/"
+//       })
+//   }, [code])
+
+
+
 
 
 

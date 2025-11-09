@@ -11,4 +11,11 @@ const production = {
   export const config = process.env.NODE_ENV === 'development' ? development : production;
   // export const config = production;
 
+
+// // Constants.js
+// export const config = {
+//   api: process.env.REACT_APP_API_URL || "http://127.0.0.1:5000",
+//   url: process.env.REACT_APP_REDIRECT_URI || "http://127.0.0.1:3000"
+// };
+
  
