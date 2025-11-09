@@ -8,7 +8,10 @@ productController.get('/', verifyToken, async(req, res) => {
         const products = await Product.find(req.query)
         return res.status(200).json(products)
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        if (!verifyToken) {
+            throw new Error("Please Login First!")
+          }
     }
 })
 
@@ -22,7 +25,10 @@ productController.get('/find/:id', verifyToken, async(req, res) => {
     }
     return res.status(200).json(product)
    } catch (error) {
-    console.error(error)
+    console.error(error);
+    if (!verifyToken) {
+        throw new Error("Please Login First!")
+      }
    }
 })
 
@@ -32,7 +38,10 @@ productController.post('/', verifyTokenAdmin, async(req, res) => {
         const newProduct = await Product.create({...req.body})
         return res.status(201).json(newProduct)
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        if (!verifyTokenAdmin) {
+            throw new Error("Please Login First!")
+          }
     }
 })
 

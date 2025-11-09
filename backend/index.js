@@ -72,7 +72,7 @@ app.use('/auth', authController)
 app.use('/product', productController)
 app.use('/upload', uploadController)
 
-app.use('/spotify', spotifyController)
+app.use('/', spotifyController)
 
 
 

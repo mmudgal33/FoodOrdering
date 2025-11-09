@@ -22,7 +22,10 @@ uploadController.post('/image', verifyToken, upload.single('image'), (req, res) 
   try {
     return res.status(201).json({msg: "Successfully uploaded file"})
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
+    if (!verifyToken) {
+      throw new Error("Please Login First!")
+    }
   }
 })
 

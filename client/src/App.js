@@ -14,7 +14,11 @@ import Checkout from './components/checkout/Checkout';
 import {useLocation} from 'react-router-dom'
 import { useEffect } from 'react';
 
-// import SpotifyApp from './components/SpotifyApp/SpotifyApp';
+import AppSpotify  from './spotifyApp/AppSpotify';
+import Dashboard from './spotifyApp/Dashboard';
+
+
+// import Dashboard  from './spotifyApp/Dashboard';
 
 // import AppJS from './AppJS';
 
@@ -39,9 +43,10 @@ function App() {
          <Route path='/foods/:id' element={<FoodCatalog />} />
          <Route path='/cart' element={<Cart />} />
          <Route path='/checkout' element={<Checkout />} />
-         {/* <Route path='/spotifyapp' element={<SpotifyApp />} /> */}
+         <Route path='/dashboard' element={<Dashboard />} />
+         <Route path='/callback' element={<AppSpotify />} />
        </Routes>
-       <Footer />
+       {/* <Footer /> */}
        {/* <AppJS/> */}
     </div>
   );

@@ -43,84 +43,6 @@ const Navbar = () => {
 
   }
 
-  
-
-  
-    // const handleSpotify = async() => {
-     
-    //  const res = await fetch(`/`, {
-    // //  const res = await fetch(`${URL}/`, {
-    //    headers: {
-    //      "Authorization": `Bearer ${token}`
-    //    },
-    //    method: "GET",
-    //  })
-    
-    // }
-    
-
-
-
-  // const handleSpotify = async() => {
-    
-  //     try {
-        
-  //       // sending order
-  //       const res = await fetch(`http://localhost:5000/`, {
-  //       // const res = await fetch(`${URL}/`, {
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`
-  //         }, 
-  //       })
-
-  
-  //       // const order = await res.json()
-  //       // console.log(order)
-  
-  //       // navigate('/foods')
-  
-  //     } catch (error) {
-  //       console.error(error)
-  //     }
-
-    
-    
-  // }
-
-
-
-  const handleSpotify = async () => {
-
-
-    try {
-      const res = await fetch(`http://localhost:5000/spotify/login`, {
-      // const res = await fetch(`${URL}/spotify/login`, {
-      // const res = await fetch('https://foodordering-r5ix.onrender.com', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        method: "GET",
-        // mode: 'no-cors',
-        // body: JSON.stringify({ email, password })
-      })
-
-      const data = await res.json()
-      console.log('data',data);
-      // dispatch(login(data)) // {userInfo, token}
-
-      navigate("/")
-
-    } catch (error) {
-      setError(true)
-      setTimeout(() => {
-        setError(false)
-      }, 3000)
-    }
-
-  }
-
-  
 
 
   return (
@@ -161,7 +83,8 @@ const Navbar = () => {
             <div className={classes.cartQuantity}>{products.length}</div>
           </Link>
 
-          <button onClick={handleSpotify} className={classes.logout}>SpotifyApp</button>
+          {/* <button onClick={handleSpotify} className={classes.logout}>SpotifyApp</button> */}
+          <Link to='/callback'><button className={classes.logout}>Spotify</button></Link>
 
           {
             user ? <button onClick={handleLogout} className={classes.logout}>Logout</button> :
