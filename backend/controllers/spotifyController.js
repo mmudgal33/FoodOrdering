@@ -39,10 +39,8 @@ const spotifyApi2 = new SpotifyWebApi({
     // clientId: process.env.CLIENT_ID,
     // clientSecret: process.env.CLIENT_SECRET,
     
-    // clientId: process.env.CLIENT_ID,
-    // clientSecret: process.env.CLIENT_SECRET,
-    clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
-    clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
     redirectUri: `${REDIRECT_URI}/callback`,
     
     // redirectUri: 'http://127.0.0.1:3000/callback',
@@ -56,15 +54,7 @@ spotifyController.post('/login', (req, res) => {
     const code = req.body.code
     console.log('backend received', code)
     console.log(`redirectUri ${REDIRECT_URI}/callback`)
-    // const spotifyApi2 = new SpotifyWebApi({
-    //     //   redirectUri: process.env.REDIRECT_URI,
-    //     //   clientId: process.env.CLIENT_ID,
-    //     //   clientSecret: process.env.CLIENT_SECRET,
-    //     clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
-    //     clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
-    //     redirectUri: 'http://127.0.0.1:3000/callback',
-    //     // redirectUri: 'https://spotifybackendtofrontendapp-1.onrender.com/callback',
-    // })
+    
 
     spotifyApi2
         .authorizationCodeGrant(code)
@@ -84,17 +74,7 @@ spotifyController.post('/login', (req, res) => {
 
 spotifyController.post('/refresh', (req, res) => {
     const refreshToken = req.body.refreshToken
-    // const spotifyApi = new SpotifyWebApi({
-    //     //   redirectUri: process.env.REDIRECT_URI,
-    //     //   clientId: process.env.CLIENT_ID,
-    //     //   clientSecret: process.env.CLIENT_SECRET,
-    //     clientId: 'e257dc917f8640b5a9afe2f6e6ac1ef9',
-    //     clientSecret: 'b7265469b062446b973c4ad5a4e24c53',
-    //     redirectUri: 'http://127.0.0.1:3000/callback',
-    //     // redirectUri: 'https://spotifybackendtofrontendapp-1.onrender.com/callback',
-
-    //     refreshToken,
-    // })
+    
 
     spotifyApi2
         .refreshAccessToken()
