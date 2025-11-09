@@ -4,7 +4,10 @@ import { config } from './Constants';
 
 const API = config.api;
 
-export default function useAuth(code) {
+
+
+
+  export default function useAuth(code) {
   const [accessToken, setAccessToken] = useState()
   const [refreshToken, setRefreshToken] = useState()
   const [expiresIn, setExpiresIn] = useState()
@@ -15,9 +18,13 @@ export default function useAuth(code) {
       console.log('No code provided to useAuth');
       return;
     }
-    
+
+  
+
     console.log('useAuth - Code:', code);
     console.log('useAuth - API URL:', API);
+    // .post("http://127.0.0.1:5000/login", 
+    // .post("https://spotifybackendtofrontendapp.onrender.com/login",
     
     axios
       .post(`${API}/login`, { code })
@@ -36,7 +43,9 @@ export default function useAuth(code) {
       })
   }, [code])
 
-  // ... rest of your useAuth code
+  
+
+  
   console.log(`accessToken ${accessToken}`);
   console.log(`refreshToken ${refreshToken}`);
   console.log(`expiresIn ${expiresIn}`);
@@ -97,38 +106,6 @@ export default function useAuth(code) {
 
 
 
-
-
-
-// import { useState, useEffect } from "react"
-// import axios from "axios"
-
-// import { config } from './Constants';
-// const API = config.api;
-
-
-// export default function useAuth(code) {
-//   const [accessToken, setAccessToken] = useState()
-//   const [refreshToken, setRefreshToken] = useState()
-//   const [expiresIn, setExpiresIn] = useState()
-
-//   useEffect(() => {
-//     console.log('useAuth ', code, API)
-//     axios
-//       // .post("http://127.0.0.1:5000/login", 
-//       // .post("https://spotifybackendtofrontendapp.onrender.com/login",
-//       .post(`${API}/login`,
-//       {code})
-//       .then(res => {
-//         setAccessToken(res.data.accessToken)
-//         setRefreshToken(res.data.refreshToken)
-//         setExpiresIn(res.data.expiresIn)
-//         window.history.pushState({}, null, "/")
-//       })
-//       .catch(() => {
-//         window.location = "/"
-//       })
-//   }, [code])
 
 
 
