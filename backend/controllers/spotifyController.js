@@ -6,13 +6,17 @@ const dotenv = require('dotenv').config()
 
 if (process.env.NODE_ENV === 'production') {
     // Production optimizations
-    REDIRECT_URI='https://spotifybackendtofrontendappf.onrender.com',
-    API='https://spotifybackendtofrontendapp.onrender.com'
+    // REDIRECT_URI='https://spotifybackendtofrontendappf.onrender.com',
+    // API='https://spotifybackendtofrontendapp.onrender.com'
+    REDIRECT_URI='https://foodordering-1-mpp9.onrender.com',
+    API='https://foodordering-r5ix.onrender.com'
   } else {
     // Development features
     REDIRECT_URI='http://127.0.0.1:3000',
     API='http://127.0.0.1:5000'
   }
+
+  
 
   
 //////////////////////////////////////////  BACKEND APP CODE  //////////////////////////////////////////////
