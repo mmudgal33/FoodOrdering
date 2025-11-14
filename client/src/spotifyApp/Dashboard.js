@@ -14,7 +14,7 @@ import { spotifyService } from './SpotifyService';
 // http://127.0.0.1:5000
 
 let buttonS = {
-    marginTop: '2.5rem',
+    marginTop: '5px',
     outline: 'none',
     border: '1px solid transparent',
     padding: '0.5rem 1.5rem',
@@ -35,6 +35,13 @@ let inputS = {
     paddingBottom: '0.25rem',
     transition: '150ms all ease-in-out',
 }
+
+let flexS = {
+  display: 'flex', 
+  alignItems: 'center', 
+  justifyContent: 'spaceEvenly', 
+  gap: '36px', flexWrap: 'wrap', 
+  flexDirection: 'row'}
 
 
 const spotifyApi = new SpotifyWebApi({
@@ -62,7 +69,7 @@ export default function Dashboard({ code }) {
   const [search, setSearch] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [playingTrack, setPlayingTrack] = useState()
-  const [lyrics, setLyrics] = useState("")
+  // const [lyrics, setLyrics] = useState("")
 
 
 
@@ -75,7 +82,7 @@ export default function Dashboard({ code }) {
   function chooseTrack(track) {
     setPlayingTrack(track)
     setSearch("")
-    setLyrics("")
+    // setLyrics("")
   }
 
   function handlePlay(track) {
@@ -90,38 +97,7 @@ export default function Dashboard({ code }) {
   }, [accessToken])
 
 
-  // useEffect(() => {
-  //   if (!search) return setSearchResults([])
-  //   if (!accessToken) return
 
-  //   let cancel = false
-  //   spotifyApi.searchTracks(search).then(res => {
-  //     if (cancel) return
-  //     setSearchResults(
-  //       res.body.tracks.items.map(track => {
-  //         const smallestAlbumImage = track.album.images?.reduce(
-  //           (smallest, image) => {
-  //             if (image.height < smallest.height) return image
-  //             return smallest
-  //           },
-  //           track.album.images[0]
-  //         )
-
-  //         return {
-  //           artist: track.artists[0].name,
-  //           title: track.name,
-  //           uri: track.uri,
-  //           albumUrl: smallestAlbumImage.url,
-  //         }
-  //       })
-  //     )
-  //   })
-
-  //   return () => (cancel = true)
-  // }, [search, accessToken])
-
-
-  
 
 
 
@@ -129,6 +105,7 @@ export default function Dashboard({ code }) {
   console.log('Dashboard code ', code);
   console.log('Dashboard Token ', accessToken);
 
+  // console.log(`playlists ${JSON.stringify(playlists)}`)
   console.log('playlists ', playlists);
   console.log('topTracks ', topTracks);
   console.log('user ', user);
@@ -177,27 +154,6 @@ export default function Dashboard({ code }) {
 
 
 
-  // const handlePlayPause = async (track) => {
-  //   try {
-  //     const playbackState = await spotifyService.getPlaybackState();
-
-  //     if (playbackState.is_playing) {
-  //       await spotifyService.pause();
-  //     } else {
-  //       await spotifyService.play();
-  //     }
-  //   } catch (error) {
-  //     console.error('Playback error:', error);
-  //   }
-  // };
-
-
-
-
-
-
-
-
 
 
   if (!user) {
@@ -217,32 +173,7 @@ export default function Dashboard({ code }) {
     <div style={{ marginTop: '80px' }}>
       <Container className="d-flex flex-column py-2" style={{ height: "100vh" }}>
 
-        {/* <div>
-          <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
-        </div> */}
-
-        {/* <Form.Control
-          type="search"
-          placeholder="Search Songs/Artists"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-          {searchResults.map(track => (
-            <TrackSearchResult
-              track={track}
-              key={track.uri}
-              chooseTrack={chooseTrack}
-            />
-          ))}
-          
-
-          {searchResults.length === 0 && (
-            <div className="text-center" style={{ whiteSpace: "pre" }}>
-              {lyrics}
-            </div>
-          )}
-        </div> */}
+        
 
 
         <div className="dashboard">
@@ -259,7 +190,7 @@ export default function Dashboard({ code }) {
           {/* <div className="flex-grow-1 my-2"> */}
           <section>
             <h2>Your Top Tracks</h2>
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'spaceEvenly', gap: '36px', flexWrap: 'wrap', flexDirection: 'row', overflowX:'auto'}}>
+            <div style={flexS}>
               {topTracks.map(track => (
                 <div key={track.id} className="playlist-card">
                   <img height="200px" src={track.album.images[1]?.url} alt={track.name} />
@@ -276,7 +207,7 @@ export default function Dashboard({ code }) {
 
           <section>
             <h2>Your Playlists</h2>
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'spaceEvenly', gap: '36px', flexWrap: 'wrap', flexDirection: 'row'}} >
+            <div style={flexS} >
               {playlists.map(playlist => (
                 <div key={playlist.id} className="playlist-card" >
                   {/* <img src={playlist.images[0]?.url} alt={playlist.name} /> */}
@@ -284,9 +215,6 @@ export default function Dashboard({ code }) {
                   <h4>{playlist.name}</h4>
                   <p>{playlist.tracks.total} tracks</p>
                   
-                  {/* <button onClick={handlePlayPause}>Play</button> */}
-                  {/* <button onClick={handlePrevious}>Previous</button>
-                    <button onClick={handleNext}>Next</button> */}
                 </div>
               ))}
             </div>
@@ -306,13 +234,10 @@ export default function Dashboard({ code }) {
               placeholder="Search for tracks, artists..."
               style={inputS}
             />
+            &nbsp;&nbsp;
             <button type="submit" style={buttonS}>Search</button>
           </form>
 
-          
-        
-
-          
 
           {searchResults.length > 0 && (
             <section>
@@ -336,6 +261,8 @@ export default function Dashboard({ code }) {
           )}
 
         </div>
+
+        <br/><br/>
 
 
 
@@ -363,7 +290,79 @@ export default function Dashboard({ code }) {
 
 
 
-{/* <div key={track.id} className="track-item" onClick={()=>handlePlay(track)}> */}
+  // useEffect(() => {
+  //   if (!search) return setSearchResults([])
+  //   if (!accessToken) return
+
+  //   let cancel = false
+  //   spotifyApi.searchTracks(search).then(res => {
+  //     if (cancel) return
+  //     setSearchResults(
+  //       res.body.tracks.items.map(track => {
+  //         const smallestAlbumImage = track.album.images?.reduce(
+  //           (smallest, image) => {
+  //             if (image.height < smallest.height) return image
+  //             return smallest
+  //           },
+  //           track.album.images[0]
+  //         )
+
+  //         return {
+  //           artist: track.artists[0].name,
+  //           title: track.name,
+  //           uri: track.uri,
+  //           albumUrl: smallestAlbumImage.url,
+  //         }
+  //       })
+  //     )
+  //   })
+
+  //   return () => (cancel = true)
+  // }, [search, accessToken])
+
+
+  {/* <div>
+          <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
+        </div> */}
+
+        {/* <Form.Control
+          type="search"
+          placeholder="Search Songs/Artists"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+        <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
+          {searchResults.map(track => (
+            <TrackSearchResult
+              track={track}
+              key={track.uri}
+              chooseTrack={chooseTrack}
+            />
+          ))}
+          
+
+          {searchResults.length === 0 && (
+            <div className="text-center" style={{ whiteSpace: "pre" }}>
+              {lyrics}
+            </div>
+          )}
+        </div> */}
+
+
+
+  // const handlePlayPause = async (track) => {
+  //   try {
+  //     const playbackState = await spotifyService.getPlaybackState();
+
+  //     if (playbackState.is_playing) {
+  //       await spotifyService.pause();
+  //     } else {
+  //       await spotifyService.play();
+  //     }
+  //   } catch (error) {
+  //     console.error('Playback error:', error);
+  //   }
+  // };
 
 
 
