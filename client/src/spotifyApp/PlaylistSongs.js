@@ -15,13 +15,20 @@ let buttonS = {
   cursor: 'pointer'
 }
 
-let flexS = {
+
+const flexS = {
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'spaceEvenly',
-  gap: '36px', flexWrap: 'wrap',
-  flexDirection: 'row'
-}
+  gap: '36px',
+  flexWrap: 'nowrap', // Change to nowrap for horizontal scroll
+  flexDirection: 'row',
+  overflowX: 'auto', // Enable horizontal scrolling
+  overflowY: 'hidden', // Hide vertical scroll
+  padding: '10px 0',
+  // Optional: Hide scrollbar for cleaner look (webkit browsers)
+  scrollbarWidth: 'none', // Firefox
+  msOverflowStyle: 'none', // IE/Edge
+};
 
 
 const PlaylistSongs = ({ accessToken, playlistId }) => {

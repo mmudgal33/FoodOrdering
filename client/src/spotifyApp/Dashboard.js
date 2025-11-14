@@ -35,13 +35,21 @@ let inputS = {
     transition: '150ms all ease-in-out',
 }
 
-let flexS = {
-  display: 'flex', 
-  alignItems: 'center', 
-  justifyContent: 'spaceEvenly', 
-  gap: '36px', flexWrap: 'wrap', 
-  flexDirection: 'row'
-}
+
+
+const flexS = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '36px',
+  flexWrap: 'nowrap', // Change to nowrap for horizontal scroll
+  flexDirection: 'row',
+  overflowX: 'auto', // Enable horizontal scrolling
+  overflowY: 'hidden', // Hide vertical scroll
+  padding: '10px 0',
+  // Optional: Hide scrollbar for cleaner look (webkit browsers)
+  scrollbarWidth: 'none', // Firefox
+  msOverflowStyle: 'none', // IE/Edge
+};
 
 
 const spotifyApi = new SpotifyWebApi({
@@ -268,7 +276,7 @@ export default function Dashboard({ code }) {
             </div>
           </section>
 
-          {/* <PlaylistSongs accessToken={accessToken} playlistId={playlistId}/> */}
+          <hr /><hr /><h2>Click Playlist Tracks For Its Tracks</h2><hr /><hr />
 
           {playlistId && (
         <PlaylistSongs 
