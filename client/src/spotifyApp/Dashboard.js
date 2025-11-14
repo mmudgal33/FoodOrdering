@@ -2,8 +2,7 @@ import { useState, useEffect } from "react"
 import useAuth from "./useAuth"
 
 import Player from "./Player"
-import TrackSearchResult from "./TrackSearchResult"
-
+import PlaylistSongs from "./PlaylistSongs"
 
 import { Container, Form } from "react-bootstrap"
 import SpotifyWebApi from "spotify-web-api-node"
@@ -41,7 +40,8 @@ let flexS = {
   alignItems: 'center', 
   justifyContent: 'spaceEvenly', 
   gap: '36px', flexWrap: 'wrap', 
-  flexDirection: 'row'}
+  flexDirection: 'row'
+}
 
 
 const spotifyApi = new SpotifyWebApi({
@@ -67,16 +67,23 @@ export default function Dashboard({ code }) {
   // const [search, setSearch] = useState('');
 
   const [search, setSearch] = useState("")
-  const [searchResults, setSearchResults] = useState([])
   const [playingTrack, setPlayingTrack] = useState()
+
+  const [searchResults, setSearchResults] = useState([])
   // const [lyrics, setLyrics] = useState("")
+  const [deviceId, setDeviceId] = useState("")
+  const [playlistId, setplaylistId] = useState("");
 
+  
 
+  
 
   console.log('Dashboard Token ', accessToken);
   console.log('localStorage ', localStorage.getItem('spotify_access_token'))
   console.log('searchResults ', searchResults)
   // console.log('search ',search)
+  console.log('deviceId ',deviceId);
+  
 
 
   function chooseTrack(track) {
@@ -97,11 +104,49 @@ export default function Dashboard({ code }) {
   }, [accessToken])
 
 
+  useEffect(()=>{
+    if (!accessToken) return
+
+    const setActiveDevice = async () => {
+      const activeDeviceId = await ensureActiveDevice();
+      setDeviceId(activeDeviceId);
+    };
+
+    setActiveDevice();
+
+  }, [accessToken])
+
+  const ensureActiveDevice = async () => {
+    try {
+      const response = await fetch('https://api.spotify.com/v1/me/player/devices', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const { devices } = await response.json();
+      // console.log('devices ',devices)
+
+      if (!devices || devices.length === 0) {
+        alert('No active devices found. Please start playing a song on a Spotify app.');
+        return null;
+      }
+
+      const activeDeviceId = devices[0]?.id; 
+      if (!activeDeviceId) {
+        alert('No active device found. Please activate a Spotify player.');
+        return null;
+      }
+
+      return activeDeviceId;
+      
+    } catch (error) {
+      console.error('Error ensuring active device:', error.message);
+      return null;
+    }
+  };
 
 
 
-
-  ////////////////////////////////////////////////////////////////////////////////////////////
   console.log('Dashboard code ', code);
   console.log('Dashboard Token ', accessToken);
 
@@ -179,6 +224,7 @@ export default function Dashboard({ code }) {
         <div className="dashboard">
           <header>
             <h1>Welcome, {user.display_name}</h1>
+            {/* <img src={user.images?.[0]?.url} alt="Profile" className="profile-img" /> */}
             <img src={user.images?.[0]?.url} alt="Profile" className="profile-img" />
             {/* <button onClick={()=>spotifyService.logout()}>Logout</button> */}
           </header>
@@ -214,11 +260,22 @@ export default function Dashboard({ code }) {
                   <img height="200px" src={playlist.images?.[0]?.url} alt={playlist.name} />
                   <h4>{playlist.name}</h4>
                   <p>{playlist.tracks.total} tracks</p>
-                  
+                  {/* <button onClick={()=>getPlaylistTracks(playlist.id)} style={buttonS}>playlist tracks</button> */}
+                  {/* <button onClick={()=>getPlaylistSongsDetails(playlist.id)} style={buttonS}>playlist tracks</button> */}
+                  <button onClick={()=>setplaylistId(playlist.id)} style={buttonS}>playlist tracks</button>
                 </div>
               ))}
             </div>
           </section>
+
+          {/* <PlaylistSongs accessToken={accessToken} playlistId={playlistId}/> */}
+
+          {playlistId && (
+        <PlaylistSongs 
+          accessToken={accessToken} 
+          playlistId={playlistId} 
+        />
+      )}
 
         </div>
 
@@ -276,6 +333,105 @@ export default function Dashboard({ code }) {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   const getPlaylistTracks = async (playlistId) => {
+//     try {
+//       const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+//         headers: {
+//           'Authorization': `Bearer ${accessToken}`
+//         }
+//       });
+      
+//       const data = await response.json();
+//       console.log('getPlaylistTracks ',data)
+//       return data;
+//     } catch (error) {
+//       console.error('Error fetching playlist tracks:', error);
+//     }
+//   };
+
+
+
+//   const getPlaylistSongsDetails = async (playlistId) => {
+//     setplaylistId(playlistId)
+//     try {
+//       const playlistData = await getPlaylistTracks(playlistId);
+      
+//       if (!playlistData || !playlistData.items) {
+//         console.log('No tracks found in playlist');
+//         return [];
+//       }
+  
+//       const tracks = playlistData.items.map(item => {
+//         const track = item.track;
+//         return {
+//           id: track.id,
+//           name: track.name,
+//           uri: track.uri, // Track URI
+//           images: {
+//             large: getImageBySize(track.album.images, 'large'),
+//             medium: getImageBySize(track.album.images, 'medium'),
+//             small: getImageBySize(track.album.images, 'small')
+//           },
+//           duration_ms: track.duration_ms,
+//           artists: track.artists.map(artist => ({
+//             id: artist.id,
+//             name: artist.name,
+//             uri: artist.uri
+//           })),
+//           album: {
+//             id: track.album.id,
+//             name: track.album.name,
+//             uri: track.album.uri,
+//             images: track.album.images, // Array of images (different sizes)
+//             release_date: track.album.release_date
+//           },
+//           preview_url: track.preview_url,
+//           external_urls: track.external_urls
+//         };
+//       });
+  
+//       return tracks;
+//     } catch (error) {
+//       console.error('Error processing playlist tracks:', error);
+//       return [];
+//     }
+//   };
+
+
+//   // Helper function to get specific image size
+// const getImageBySize = (images, size) => {
+//   const sizeMap = {
+//     'large': 0,    // 640px
+//     'medium': 1,   // 300px
+//     'small': 2     // 64px
+//   };
+  
+//   return images[sizeMap[size]] || images[0];
+// };
+
+
+
+
+
+
+
+
+
+
+
 
 
 
