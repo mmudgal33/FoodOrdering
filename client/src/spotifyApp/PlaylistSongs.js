@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 // import getPlaylistSongsDetails from './Dashboard'
-import Player from "./Player"
+// import Player from "./Player"
 
 let buttonS = {
   marginTop: '5px',

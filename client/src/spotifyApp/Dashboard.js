@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { Link, useNavigate } from 'react-router-dom'
 import useAuth from "./useAuth"
 
 import Player from "./Player"
@@ -6,23 +7,23 @@ import PlaylistSongs from "./PlaylistSongs"
 
 import { Container, Form } from "react-bootstrap"
 import SpotifyWebApi from "spotify-web-api-node"
-
-
 import { spotifyService } from './SpotifyService';
+
+import user_profile from './assets/user_profile.jpg';
 
 // http://127.0.0.1:5000
 
 let buttonS = {
-    marginTop: '5px',
-    outline: 'none',
-    border: '1px solid transparent',
-    padding: '0.5rem 1.5rem',
-    backgroundColor: '#f22a2a',
-    color: '#fff',
-    fontWeight: '500',
-    fontSize: '20px',
-    borderRadius: '20px',
-    cursor: 'pointer'
+  marginTop: '5px',
+  outline: 'none',
+  border: '1px solid transparent',
+  padding: '0.5rem 1.5rem',
+  backgroundColor: '#f22a2a',
+  color: '#fff',
+  fontWeight: '500',
+  fontSize: '20px',
+  borderRadius: '20px',
+  cursor: 'pointer'
 }
 
 let inputS = {
@@ -63,7 +64,8 @@ export default function Dashboard({ code }) {
 
   console.log('Dashboard code ', code);
 
-  const accessToken = useAuth(code);
+  let accessToken = useAuth(code);
+  const navigate = useNavigate()
 
 
 
@@ -213,7 +215,13 @@ export default function Dashboard({ code }) {
     return <div>Loading...</div>;
   }
 
-
+  
+  const handleLogout = async () => {
+    accessToken='';
+    localStorage.removeItem('spotify_access_token');
+    localStorage.removeItem('spotify_refresh_token');
+    navigate("/")
+  };
 
 
 
@@ -231,19 +239,27 @@ export default function Dashboard({ code }) {
 
         <div className="dashboard">
           <header>
-            <h1>Welcome, {user.display_name}</h1>
-            {/* <img src={user.images?.[0]?.url} alt="Profile" className="profile-img" /> */}
-            <img src={user.images?.[0]?.url} alt="Profile" className="profile-img" />
+          <img src={user.images?.[0]?.url || user_profile} alt="Profile" className="profile-img" />
+          <button onClick={()=>handleLogout()} style={buttonS}>Logout</button>
+            <h1>Welcome, {user.display_name} 
+            
+            </h1>
+            
             {/* <button onClick={()=>spotifyService.logout()}>Logout</button> */}
+            
           </header>
         </div>
+
+        
+
+        
 
 
 
         <div className="sections">
           {/* <div className="flex-grow-1 my-2"> */}
           <section>
-            <h2>Your Top Tracks</h2>
+          <hr /><h2>{user.display_name} Top Tracks</h2><hr />
             <div style={flexS}>
               {topTracks.map(track => (
                 <div key={track.id} className="playlist-card">
@@ -257,10 +273,10 @@ export default function Dashboard({ code }) {
             </div>
           </section>
 
-          <hr /><hr /><hr /><hr />
+          
 
           <section>
-            <h2>Your Playlists</h2>
+          <hr/><h2>{user.display_name} Playlists</h2><hr />
             <div style={flexS} >
               {playlists.map(playlist => (
                 <div key={playlist.id} className="playlist-card" >
@@ -276,7 +292,7 @@ export default function Dashboard({ code }) {
             </div>
           </section>
 
-          <hr /><hr /><h2>Click Playlist Tracks For Its Tracks</h2><hr /><hr />
+          <hr /><h2>Click <span style={{fontWeight:'25px', color:'red'}}>Playlist Tracks</span> Button For Its Tracks</h2><hr />
 
           {playlistId && (
         <PlaylistSongs 
@@ -286,6 +302,12 @@ export default function Dashboard({ code }) {
       )}
 
         </div>
+
+
+
+
+
+        <hr /><h2>Search Tracks For Its Listening</h2><hr />
 
 
 
