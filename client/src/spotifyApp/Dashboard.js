@@ -13,6 +13,29 @@ import { spotifyService } from './SpotifyService';
 
 // http://127.0.0.1:5000
 
+let buttonS = {
+    marginTop: '2.5rem',
+    outline: 'none',
+    border: '1px solid transparent',
+    padding: '0.5rem 1.5rem',
+    backgroundColor: '#f22a2a',
+    color: '#fff',
+    fontWeight: '500',
+    fontSize: '20px',
+    borderRadius: '20px',
+    cursor: 'pointer'
+}
+
+let inputS = {
+  outline: 'none',
+    border: 'none',
+    borderBottom: '1px solid #333',
+    width: '50%',
+    paddingLeft: '0.25rem',
+    paddingBottom: '0.25rem',
+    transition: '150ms all ease-in-out',
+}
+
 
 const spotifyApi = new SpotifyWebApi({
   // clientId: "8b945ef10ea24755b83ac50cede405a0",
@@ -236,13 +259,13 @@ export default function Dashboard({ code }) {
           {/* <div className="flex-grow-1 my-2"> */}
           <section>
             <h2>Your Top Tracks</h2>
-            <div className="tracks-grid">
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'spaceEvenly', gap: '36px', flexWrap: 'wrap', flexDirection: 'row', overflowX:'auto'}}>
               {topTracks.map(track => (
-                <div key={track.id} className="track-card">
-                  <img src={track.album.images[1]?.url} alt={track.name} />
+                <div key={track.id} className="playlist-card">
+                  <img height="200px" src={track.album.images[1]?.url} alt={track.name} />
                   <h5>{track.name.slice(0, 25)}</h5>
                   <p>{track.artists[0].name}</p>
-                  <button onClick={()=>handlePlay(track)}>Play</button>
+                  <button onClick={()=>handlePlay(track)} style={buttonS}>Play</button>
                   {/* <button onClick={handlePlayPause}>Play</button> */}
                 </div>
               ))}
@@ -253,11 +276,11 @@ export default function Dashboard({ code }) {
 
           <section>
             <h2>Your Playlists</h2>
-            <div className="playlists-grid">
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'spaceEvenly', gap: '36px', flexWrap: 'wrap', flexDirection: 'row'}} >
               {playlists.map(playlist => (
-                <div key={playlist.id} className="playlist-card">
+                <div key={playlist.id} className="playlist-card" >
                   {/* <img src={playlist.images[0]?.url} alt={playlist.name} /> */}
-                  <img src={playlist.images?.[0]?.url} alt={playlist.name} />
+                  <img height="200px" src={playlist.images?.[0]?.url} alt={playlist.name} />
                   <h4>{playlist.name}</h4>
                   <p>{playlist.tracks.total} tracks</p>
                   
@@ -275,31 +298,36 @@ export default function Dashboard({ code }) {
 
 
         <div>
-          <form onSubmit={handleSearch} className="search-form">
+          <form onSubmit={handleSearch} style={{marginTop:'50px'}}>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for tracks, artists..."
+              style={inputS}
             />
-            <button type="submit">Search</button>
+            <button type="submit" style={buttonS}>Search</button>
           </form>
 
+          
+        
 
+          
 
           {searchResults.length > 0 && (
             <section>
               <h2>Search Results</h2>
               <div className="search-results">
                 {searchResults.map(track => (
-                  <div key={track.id} className="track-item">
-                    <img src={track.album.images?.[2]?.url} alt={track.name} />
+                  
+                  <div key={track.id} className="d-flex m-2 align-items-center" style={{ cursor: "pointer" }} onClick={()=>handlePlay(track)}>
+                    <img src={track.album.images?.[2]?.url} alt={track.name} style={{ height: "64px", width: "64px" }} />
                     <div>
                       <h4>{track.name}</h4>
-                      <p>{track.artists[0].name}</p>
+                      <div className="text-muted">{track.artists[0].name}</div>
                     </div>
-                    {/* <button onClick={() => handlePlayPause(track)}>Play</button> */}
-                    <button onClick={()=>handlePlay(track)}>Play</button>
+                    
+                    {/* <button onClick={()=>handlePlay(track)}>Play</button> */}
 
                   </div>
                 ))}
@@ -335,7 +363,7 @@ export default function Dashboard({ code }) {
 
 
 
-
+{/* <div key={track.id} className="track-item" onClick={()=>handlePlay(track)}> */}
 
 
 
