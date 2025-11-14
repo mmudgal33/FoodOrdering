@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useAuth from "./useAuth"
 
 import Player from "./Player"
 import PlaylistSongs from "./PlaylistSongs"
 
-import { Container, Form } from "react-bootstrap"
+import { Container } from "react-bootstrap"
 import SpotifyWebApi from "spotify-web-api-node"
 import { spotifyService } from './SpotifyService';
 
@@ -297,7 +297,8 @@ export default function Dashboard({ code }) {
           {playlistId && (
         <PlaylistSongs 
           accessToken={accessToken} 
-          playlistId={playlistId} 
+          playlistId={playlistId}
+          handlePlay={handlePlay}
         />
       )}
 
@@ -307,7 +308,7 @@ export default function Dashboard({ code }) {
 
 
 
-        <hr /><h2>Search Tracks For Its Listening</h2><hr />
+        <hr /><h2>Search Tracks For Listening</h2><hr />
 
 
 
@@ -507,32 +508,32 @@ export default function Dashboard({ code }) {
   // }, [search, accessToken])
 
 
-  {/* <div>
-          <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
-        </div> */}
+  // <div>
+  //         <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
+  //       </div> 
 
-        {/* <Form.Control
-          type="search"
-          placeholder="Search Songs/Artists"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-          {searchResults.map(track => (
-            <TrackSearchResult
-              track={track}
-              key={track.uri}
-              chooseTrack={chooseTrack}
-            />
-          ))}
+  //       <Form.Control
+  //         type="search"
+  //         placeholder="Search Songs/Artists"
+  //         value={search}
+  //         onChange={e => setSearch(e.target.value)}
+  //       />
+  //       <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
+  //         {searchResults.map(track => (
+  //           <TrackSearchResult
+  //             track={track}
+  //             key={track.uri}
+  //             chooseTrack={chooseTrack}
+  //           />
+  //         ))}
           
 
-          {searchResults.length === 0 && (
-            <div className="text-center" style={{ whiteSpace: "pre" }}>
-              {lyrics}
-            </div>
-          )}
-        </div> */}
+  //         {searchResults.length === 0 && (
+  //           <div className="text-center" style={{ whiteSpace: "pre" }}>
+  //             {lyrics}
+  //           </div>
+  //         )}
+  //       </div>
 
 
 

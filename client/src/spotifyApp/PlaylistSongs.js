@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
-// import getPlaylistSongsDetails from './Dashboard'
-// import Player from "./Player"
+
 
 let buttonS = {
   marginTop: '5px',
@@ -31,27 +30,19 @@ const flexS = {
 };
 
 
-const PlaylistSongs = ({ accessToken, playlistId }) => {
+const PlaylistSongs = ({ accessToken, playlistId, handlePlay }) => {
   // console.log('tracks ',tracks)
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [search, setSearch] = useState("")
+  
   const [playingTrack, setPlayingTrack] = useState()
 
   const [playlistTracks, setPlaylistTracks] = useState("");
 
 
 
-  function chooseTrack(track) {
-    setPlayingTrack(track)
-    setSearch("")
-    // setLyrics("")
-  }
-
-  function handlePlay(track) {
-    chooseTrack(track)
-  }
+  
 
 
   useEffect(() => {
@@ -184,7 +175,7 @@ const PlaylistSongs = ({ accessToken, playlistId }) => {
   if (loading) return <div>Loading tracks...</div>;
 
   return (
-    <div>
+    <>
       <section>
         <h2>Playlist Tracks</h2>
         <div style={flexS}>
@@ -198,7 +189,7 @@ const PlaylistSongs = ({ accessToken, playlistId }) => {
           ))}
         </div>
       </section>
-    </div>
+    </>
   );
 };
 
