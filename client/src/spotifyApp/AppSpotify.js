@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import Login from "./Login"
 import Dashboard from "./Dashboard"
-import DebugAuth from "./DebugAuth"
+// import DebugAuth from "./DebugAuth"
 
 function AppSpotify() {
   // Get code from URL parameters
@@ -26,7 +26,7 @@ function AppSpotify() {
   // return code ? <Dashboard code={code} /> : <Login />
   return (
     <>
-      <DebugAuth />
+      {/* <DebugAuth /> */}
       {code ? <Dashboard code={code} /> : <Login />}
     </>
   );

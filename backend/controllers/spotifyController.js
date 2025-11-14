@@ -16,20 +16,11 @@ if (process.env.NODE_ENV === 'production') {
     API='http://127.0.0.1:5000'
   }
 
-  
-
-  
-//////////////////////////////////////////  BACKEND APP CODE  //////////////////////////////////////////////
 
 // const API = 'https://spotifybackendtofrontendapp.onrender.com';
 // const API = 'http://127.0.0.1:5000'
 // const REDIRECT_URI='http://127.0.0.1:3000'
 // const REDIRECT_URI='https://spotifybackendtofrontendappf.onrender.com'
-
-
-
-
-
 
 
 ////////////////////////////////////////////  FRONTEND APP CODE  /////////////////////////////////////////////
@@ -286,6 +277,23 @@ spotifyController.get('/top/:type', authenticate, async (req, res) => {
 
 
 module.exports = spotifyController;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
